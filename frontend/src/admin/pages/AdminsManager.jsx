@@ -637,79 +637,125 @@ const AdminsManager = () => {
                 }}>
                   Permissions
                 </label>
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  gap: '12px',
-                  padding: '16px',
-                  background: '#F9FAFB',
-                  borderRadius: '8px',
-                  border: '1px solid #E5E7EB'
-                }}>
-                  <label style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '10px', 
-                    cursor: 'pointer',
-                    fontSize: '15px',
-                    color: '#374151'
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.permissions.canManageAdmins}
-                      onChange={() => togglePermission('canManageAdmins')}
-                      data-testid="permission-manage-admins"
-                      style={{
-                        width: '18px',
-                        height: '18px',
-                        cursor: 'pointer'
-                      }}
-                    />
-                    <span>Can Manage Admins</span>
-                  </label>
-                  <label style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '10px', 
-                    cursor: 'pointer',
-                    fontSize: '15px',
-                    color: '#374151'
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.permissions.canViewPrivateProjects}
-                      onChange={() => togglePermission('canViewPrivateProjects')}
-                      data-testid="permission-private-projects"
-                      style={{
-                        width: '18px',
-                        height: '18px',
-                        cursor: 'pointer'
-                      }}
-                    />
-                    <span>Can View Private Projects</span>
-                  </label>
-                  <label style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '10px', 
-                    cursor: 'pointer',
-                    fontSize: '15px',
-                    color: '#374151'
-                  }}>
-                    <input
-                      type="checkbox"
-                      checked={formData.permissions.canAccessStorage}
-                      onChange={() => togglePermission('canAccessStorage')}
-                      data-testid="permission-storage-access"
-                      style={{
-                        width: '18px',
-                        height: '18px',
-                        cursor: 'pointer'
-                      }}
-                    />
-                    <span>Can Access Storage & Files</span>
-                  </label>
+                
+                {/* Admin Management */}
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Admin Management</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', background: '#F9FAFB', borderRadius: '6px', border: '1px solid #E5E7EB' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageAdmins} onChange={() => togglePermission('canManageAdmins')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Admins</span>
+                    </label>
+                  </div>
                 </div>
+
+                {/* Content Management */}
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Content Management</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', background: '#F9FAFB', borderRadius: '6px', border: '1px solid #E5E7EB' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageAbout} onChange={() => togglePermission('canManageAbout')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage About Page</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManagePortfolio} onChange={() => togglePermission('canManagePortfolio')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Portfolio</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageBlogs} onChange={() => togglePermission('canManageBlogs')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Blogs</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageTestimonials} onChange={() => togglePermission('canManageTestimonials')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Testimonials</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageDemos} onChange={() => togglePermission('canManageDemos')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Demos</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Communication */}
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Communication</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', background: '#F9FAFB', borderRadius: '6px', border: '1px solid #E5E7EB' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canViewContacts} onChange={() => togglePermission('canViewContacts')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>View Contacts</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageContactPage} onChange={() => togglePermission('canManageContactPage')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Contact Page</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageChat} onChange={() => togglePermission('canManageChat')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Chat</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageNewsletter} onChange={() => togglePermission('canManageNewsletter')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Newsletter</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Business Features */}
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Business Features</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', background: '#F9FAFB', borderRadius: '6px', border: '1px solid #E5E7EB' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageBookings} onChange={() => togglePermission('canManageBookings')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Bookings</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageBookingSettings} onChange={() => togglePermission('canManageBookingSettings')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Booking Settings</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManagePricing} onChange={() => togglePermission('canManagePricing')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Pricing Calculator</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canViewAnalytics} onChange={() => togglePermission('canViewAnalytics')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>View Analytics</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Client Management */}
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Client Management</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', background: '#F9FAFB', borderRadius: '6px', border: '1px solid #E5E7EB' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageClients} onChange={() => togglePermission('canManageClients')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Clients</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageClientProjects} onChange={() => togglePermission('canManageClientProjects')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Client Projects</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* System */}
+                <div style={{ marginBottom: '16px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>System</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', background: '#F9FAFB', borderRadius: '6px', border: '1px solid #E5E7EB' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canAccessStorage} onChange={() => togglePermission('canAccessStorage')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Access Storage & Files</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageNotes} onChange={() => togglePermission('canManageNotes')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Notes</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
+                      <input type="checkbox" checked={formData.permissions.canManageSettings} onChange={() => togglePermission('canManageSettings')} style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <span>Manage Settings</span>
+                    </label>
+                  </div>
+                </div>
+
                 <div style={{ 
                   marginTop: '12px', 
                   padding: '12px 16px', 
@@ -719,7 +765,7 @@ const AdminsManager = () => {
                   color: '#1E40AF',
                   border: '1px solid #DBEAFE'
                 }}>
-                  <strong>💡 Note:</strong> Only admins with "Can Access Storage" permission will be able to see and manage files in the Storage section.
+                  <strong>💡 Note:</strong> Super Admin role automatically grants all permissions. Regular admins will only see sections they have permission to access.
                 </div>
               </div>
 
