@@ -236,27 +236,30 @@ const AboutManager = () => {
   }
 
   return (
-    <div style={{ padding: '0 0 40px 0' }}>
-      {/* Header */}
+    <div className="admin-page">
+      {/* Header with Gradient Background */}
       <div style={{ 
-        marginBottom: '32px', 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        padding: '32px',
+        borderRadius: '16px',
+        marginBottom: '32px',
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         flexWrap: 'wrap',
         gap: '16px'
       }}>
         <div style={{ flex: '1', minWidth: '280px' }}>
           <h1 style={{ 
-            fontSize: '28px', 
-            fontWeight: '700', 
-            color: '#1C2A3A', 
+            fontSize: '32px', 
+            fontWeight: '700',
             margin: '0 0 8px 0',
             letterSpacing: '-0.02em'
           }}>
-            About Page Manager
+            📄 About Page Manager
           </h1>
-          <p style={{ color: '#6B7280', margin: 0, fontSize: '15px', lineHeight: '1.5' }}>
+          <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
             Manage all About page content - Hero, Story, Values, Tech Stack, Numbers, Founder
           </p>
         </div>
@@ -268,14 +271,21 @@ const AboutManager = () => {
             display: 'flex', 
             alignItems: 'center', 
             gap: '8px',
-            padding: '12px 24px',
-            fontSize: '15px',
-            fontWeight: '500',
-            boxShadow: '0 2px 4px rgba(124, 92, 255, 0.2)'
+            padding: '14px 28px',
+            fontSize: '16px',
+            fontWeight: '600',
+            background: 'white',
+            color: '#667eea',
+            border: 'none',
+            borderRadius: '10px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            transition: 'all 0.3s',
+            cursor: saving ? 'not-allowed' : 'pointer',
+            opacity: saving ? 0.7 : 1
           }}
           data-testid="save-about-content-btn"
         >
-          <Save size={18} />
+          <Save size={20} />
           {saving ? 'Saving...' : 'Save All Changes'}
         </button>
       </div>
