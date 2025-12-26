@@ -85,22 +85,19 @@ const Footer = () => {
                   height: '70px',
                   width: 'auto',
                   objectFit: 'contain',
-                  filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.5)) brightness(1.1)'
+                  filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.5)) brightness(1.2) saturate(1.2)'
                 }}
               />
             </div>
             <h3 className="footer-logo" style={{
-              background: 'linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #E0C3FC 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: '#FFFFFF',
               fontWeight: '700',
               fontSize: '26px',
-              textShadow: '0 2px 10px rgba(139, 92, 246, 0.3)'
+              letterSpacing: '0.5px'
             }}>
               {agencyInfo.name}
             </h3>
-            <p className="footer-tagline" style={{ color: '#9CA3AF', fontWeight: '500' }}>{agencyInfo.tagline}</p>
+            <p className="footer-tagline" style={{ color: '#D1D5DB', fontWeight: '500' }}>{agencyInfo.tagline}</p>
             <div className="footer-social">
               <a
                 href={agencyInfo.socialLinks.github}
