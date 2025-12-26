@@ -76,7 +76,29 @@ const Footer = () => {
         {/* Footer Top */}
         <div className="footer-top">
           <div className="footer-brand">
-            <h3 className="footer-logo">{agencyInfo.name}</h3>
+            {/* Logo Image */}
+            <div style={{ marginBottom: '16px' }}>
+              <img 
+                src="/mspn-logo.jpeg" 
+                alt="MSPN DEV Logo" 
+                style={{
+                  height: '60px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))'
+                }}
+              />
+            </div>
+            <h3 className="footer-logo" style={{
+              background: 'linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #8B5CF6 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontWeight: '700',
+              fontSize: '24px'
+            }}>
+              {agencyInfo.name}
+            </h3>
             <p className="footer-tagline">{agencyInfo.tagline}</p>
             <div className="footer-social">
               <a

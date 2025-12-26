@@ -23,9 +23,34 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* Logo */}
-        <Link to="/" className="navbar-logo">
-          <span className="logo-text">{agencyInfo.name}</span>
+        {/* Logo with Image */}
+        <Link to="/" className="navbar-logo" style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          textDecoration: 'none'
+        }}>
+          <img 
+            src="/mspn-logo.jpeg" 
+            alt="MSPN DEV Logo" 
+            style={{
+              height: '45px',
+              width: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3))'
+            }}
+          />
+          <span className="logo-text" style={{
+            fontSize: '20px',
+            fontWeight: '700',
+            background: 'linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #8B5CF6 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            letterSpacing: '0.5px'
+          }}>
+            {agencyInfo.name}
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
