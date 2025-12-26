@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
 import { toast } from 'sonner';
 import { LogOut, Download, Calendar, FileText, Briefcase, TrendingUp, Clock, CheckCircle2, AlertCircle, Sparkles, Users, Building2 } from 'lucide-react';
-
-const API_URL = process.env.REACT_APP_BACKEND_URL || '/api';
 
 export default function ClientDashboard() {
   const navigate = useNavigate();
