@@ -30,7 +30,7 @@ const StorageManager = () => {
   const fetchItems = async () => {
     try {
       const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
-      const response = await axios.get(`${BACKEND_URL}/api/storage/items`, {
+      const response = await axios.get(`${BACKEND_URL}/storage/items`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setItems(response.data.items);
