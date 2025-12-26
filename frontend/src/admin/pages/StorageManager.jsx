@@ -48,13 +48,13 @@ const StorageManager = () => {
     try {
       if (editingItem) {
         await axios.put(
-          `${BACKEND_URL}/api/storage/items/${editingItem.id}`,
+          `${BACKEND_URL}/storage/items/${editingItem.id}`,
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         await axios.post(
-          `${BACKEND_URL}/api/storage/items`,
+          `${BACKEND_URL}/storage/items`,
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -73,7 +73,7 @@ const StorageManager = () => {
     
     try {
       const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
-      await axios.delete(`${BACKEND_URL}/api/storage/items/${id}`, {
+      await axios.delete(`${BACKEND_URL}/storage/items/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchItems();
