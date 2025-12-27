@@ -407,13 +407,13 @@ export default function ClientProjectsManager() {
   return (
     <div className="p-4 md:p-6 max-w-[1800px] mx-auto" data-testid="client-projects-manager">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Client Projects</h1>
-          <p className="text-gray-600 mt-1">Manage client projects and deliverables</p>
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold text-gray-900 leading-tight">Client Projects</h1>
+          <p className="text-gray-600 mt-1.5">Manage client projects and deliverables</p>
         </div>
         <Button
           onClick={() => setIsDialogOpen(true)}
-          className="flex items-center gap-2 w-full sm:w-auto justify-center"
+          className="flex items-center gap-2 w-full sm:w-auto justify-center self-center sm:self-auto"
           data-testid="create-project-btn"
         >
           <Plus className="w-4 h-4" />
