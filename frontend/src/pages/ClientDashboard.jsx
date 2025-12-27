@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import clientService from '../services/clientService';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Textarea } from '../components/ui/textarea';
+import { Input } from '../components/ui/input';
 import { toast } from 'sonner';
-import { LogOut, Download, Calendar, FileText, Briefcase, TrendingUp, Clock, CheckCircle2, AlertCircle, Sparkles, Users, Building2, Star, MessageSquare, Send } from 'lucide-react';
+import { 
+  LogOut, Download, Calendar, FileText, Briefcase, TrendingUp, Clock, 
+  CheckCircle2, AlertCircle, Sparkles, Users, Building2, Star, MessageSquare, 
+  Send, Target, ListChecks, DollarSign, Activity, MessageCircle, User
+} from 'lucide-react';
 
 export default function ClientDashboard() {
   const navigate = useNavigate();
@@ -14,15 +22,13 @@ export default function ClientDashboard() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [showTestimonialForm, setShowTestimonialForm] = useState(false);
-  const [myTestimonials, setMyTestimonials] = useState([]);
-  const [testimonialForm, setTestimonialForm] = useState({
-    role: '',
-    message: '',
-    rating: 5
-  });
-  const [submittingTestimonial, setSubmittingTestimonial] = useState(false);
-  const [hoveredRating, setHoveredRating] = useState(0);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessage, setChatMessage] = useState('');
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem('client_token');
@@ -35,8 +41,21 @@ export default function ClientDashboard() {
 
     setClient(JSON.parse(clientData));
     fetchProjects(token);
-    fetchMyTestimonials(token);
   }, [navigate]);
+
+  useEffect(() => {
+    if (selectedProject && activeTab === 'chat') {
+      fetchChatMessages();
+    }
+  }, [selectedProject, activeTab]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages]);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const fetchProjects = async (token) => {
     try {
@@ -46,6 +65,9 @@ export default function ClientDashboard() {
         }
       });
       setProjects(response.data);
+      if (response.data.length > 0) {
+        setSelectedProject(response.data[0]);
+      }
     } catch (error) {
       console.error('Error fetching projects:', error);
       if (error.response?.status === 401) {
@@ -59,46 +81,61 @@ export default function ClientDashboard() {
     }
   };
 
-  const fetchMyTestimonials = async (token) => {
+  const fetchChatMessages = async () => {
+    if (!selectedProject) return;
+    
+    const token = localStorage.getItem('client_token');
     try {
-      const response = await api.get('/testimonials/client/my-testimonials', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setMyTestimonials(response.data);
+      const messages = await clientService.getClientChatMessages(selectedProject.id, token);
+      setChatMessages(messages);
     } catch (error) {
-      console.error('Error fetching testimonials:', error);
+      console.error('Error fetching chat messages:', error);
     }
   };
 
-  const handleSubmitTestimonial = async (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    
-    if (!testimonialForm.message.trim() || testimonialForm.message.length < 10) {
-      toast.error('Please write at least 10 characters for your testimonial');
-      return;
-    }
+    if (!chatMessage.trim() || !selectedProject) return;
 
-    setSubmittingTestimonial(true);
+    setSendingMessage(true);
     const token = localStorage.getItem('client_token');
 
     try {
-      await api.post('/testimonials/client/submit', testimonialForm, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      toast.success('✅ Testimonial submitted successfully! It will be reviewed by admin.');
-      setTestimonialForm({ role: '', message: '', rating: 5 });
-      setShowTestimonialForm(false);
-      fetchMyTestimonials(token);
+      await clientService.sendClientChatMessage(selectedProject.id, chatMessage, token);
+      setChatMessage('');
+      fetchChatMessages();
+      toast.success('Message sent!');
     } catch (error) {
-      console.error('Error submitting testimonial:', error);
-      toast.error('Failed to submit testimonial. Please try again.');
+      console.error('Error sending message:', error);
+      toast.error('Failed to send message');
     } finally {
-      setSubmittingTestimonial(false);
+      setSendingMessage(false);
+    }
+  };
+
+  const handleAddComment = async (e) => {
+    e.preventDefault();
+    if (!commentText.trim() || !selectedProject) return;
+
+    setSubmittingComment(true);
+    const token = localStorage.getItem('client_token');
+
+    try {
+      await clientService.addClientComment(selectedProject.id, commentText, token);
+      setCommentText('');
+      // Refresh project data
+      const response = await api.get('/client/projects', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setProjects(response.data);
+      const updated = response.data.find(p => p.id === selectedProject.id);
+      setSelectedProject(updated);
+      toast.success('Comment added!');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast.error('Failed to add comment');
+    } finally {
+      setSubmittingComment(false);
     }
   };
 
@@ -174,6 +211,24 @@ export default function ClientDashboard() {
     return 'bg-gradient-to-r from-green-500 to-emerald-500';
   };
 
+  const getMilestoneStatus = (status) => {
+    const colors = {
+      pending: 'bg-yellow-100 text-yellow-800',
+      in_progress: 'bg-blue-100 text-blue-800',
+      completed: 'bg-green-100 text-green-800'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+  };
+
+  const getTaskStatus = (status) => {
+    const colors = {
+      todo: 'bg-gray-100 text-gray-800',
+      in_progress: 'bg-blue-100 text-blue-800',
+      completed: 'bg-green-100 text-green-800'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
@@ -183,7 +238,6 @@ export default function ClientDashboard() {
             <Sparkles className="w-6 h-6 text-purple-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
           </div>
           <p className="mt-6 text-gray-700 font-medium text-lg">Loading your projects...</p>
-          <p className="mt-2 text-gray-500 text-sm">Please wait while we fetch your data</p>
         </div>
       </div>
     );
@@ -291,364 +345,411 @@ export default function ClientDashboard() {
           </Card>
         </div>
 
-        {/* Projects List */}
-        <div>
-          <div className="flex items-center gap-3 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Your Projects</h2>
-            <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-3 py-1">
-              {projects.length} Active
-            </Badge>
-          </div>
-          {projects.length === 0 ? (
-            <Card className="border-2 border-dashed border-gray-300 bg-white">
-              <CardContent className="py-16 text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Briefcase className="w-10 h-10 text-gray-400" />
-                </div>
-                <p className="text-xl font-semibold text-gray-700 mb-2">No projects assigned yet</p>
-                <p className="text-sm text-gray-500 max-w-md mx-auto">
-                  Your project manager will assign projects to you soon. You'll receive an email notification when new projects are added.
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-6">
-              {projects.map((project) => (
-                <Card
-                  key={project.id}
-                  className="hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 hover:border-purple-300 bg-white transform hover:-translate-y-1"
-                  onClick={() => setSelectedProject(selectedProject?.id === project.id ? null : project)}
-                  data-testid={`project-card-${project.id}`}
-                >
-                  <CardHeader className="border-b bg-gradient-to-r from-gray-50 to-purple-50">
+        {/* Projects */}
+        {projects.length === 0 ? (
+          <Card className="border-2 border-dashed border-gray-300 bg-white">
+            <CardContent className="py-16 text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Briefcase className="w-10 h-10 text-gray-400" />
+              </div>
+              <p className="text-xl font-semibold text-gray-700 mb-2">No projects assigned yet</p>
+              <p className="text-sm text-gray-500 max-w-md mx-auto">
+                Your project manager will assign projects to you soon.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Project List */}
+            <div className="lg:col-span-1">
+              <Card className="border-2 border-purple-200 shadow-lg">
+                <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
+                  <CardTitle className="text-lg">Your Projects</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y max-h-[600px] overflow-y-auto">
+                    {projects.map((project) => (
+                      <div
+                        key={project.id}
+                        onClick={() => {
+                          setSelectedProject(project);
+                          setActiveTab('overview');
+                        }}
+                        className={`p-4 cursor-pointer hover:bg-purple-50 transition-colors ${
+                          selectedProject?.id === project.id ? 'bg-purple-100 border-l-4 border-purple-600' : ''
+                        }`}
+                        data-testid={`project-item-${project.id}`}
+                      >
+                        <h3 className="font-semibold text-gray-900 mb-1">{project.name}</h3>
+                        <Badge className={`${getStatusColor(project.status)} text-xs`}>
+                          {getStatusLabel(project.status)}
+                        </Badge>
+                        <div className="mt-2">
+                          <Progress value={project.progress} className="h-1.5" />
+                          <p className="text-xs text-gray-600 mt-1">{project.progress}% Complete</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Project Details */}
+            <div className="lg:col-span-3">
+              {selectedProject ? (
+                <Card className="border-2 border-purple-200 shadow-lg">
+                  <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
                     <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                          {project.name}
+                      <div>
+                        <CardTitle className="text-2xl flex items-center gap-2">
+                          {selectedProject.name}
                           <Sparkles className="w-5 h-5 text-purple-500" />
                         </CardTitle>
-                        <CardDescription className="mt-2 text-gray-600">
-                          {project.description || 'No description provided'}
+                        <CardDescription className="mt-2">
+                          {selectedProject.description || 'No description provided'}
                         </CardDescription>
                       </div>
-                      <Badge className={`${getStatusColor(project.status)} px-3 py-1.5 font-semibold flex items-center gap-1.5`} data-testid={`project-status-${project.id}`}>
-                        {getStatusIcon(project.status)}
-                        {getStatusLabel(project.status)}
+                      <Badge className={`${getStatusColor(selectedProject.status)} px-3 py-1.5 font-semibold flex items-center gap-1.5`}>
+                        {getStatusIcon(selectedProject.status)}
+                        {getStatusLabel(selectedProject.status)}
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent className="pt-6">
-                    {/* Progress */}
-                    <div className="mb-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4 text-purple-600" />
-                          Progress
-                        </span>
-                        <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" data-testid={`project-progress-${project.id}`}>
-                          {project.progress}%
-                        </span>
-                      </div>
-                      <div className="relative">
-                        <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div 
-                            className={`h-full ${getProgressColor(project.progress)} transition-all duration-500 rounded-full`}
-                            style={{ width: `${project.progress}%` }}
-                          ></div>
+
+                  <CardContent className="p-6">
+                    <Tabs value={activeTab} onValueChange={setActiveTab}>
+                      <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-6">
+                        <TabsTrigger value="overview" className="text-xs lg:text-sm">
+                          <Briefcase className="w-4 h-4 mr-1" />
+                          Overview
+                        </TabsTrigger>
+                        <TabsTrigger value="milestones" className="text-xs lg:text-sm">
+                          <Target className="w-4 h-4 mr-1" />
+                          Milestones
+                        </TabsTrigger>
+                        <TabsTrigger value="tasks" className="text-xs lg:text-sm">
+                          <ListChecks className="w-4 h-4 mr-1" />
+                          Tasks
+                        </TabsTrigger>
+                        <TabsTrigger value="team" className="text-xs lg:text-sm">
+                          <Users className="w-4 h-4 mr-1" />
+                          Team
+                        </TabsTrigger>
+                        <TabsTrigger value="budget" className="text-xs lg:text-sm">
+                          <DollarSign className="w-4 h-4 mr-1" />
+                          Budget
+                        </TabsTrigger>
+                        <TabsTrigger value="files" className="text-xs lg:text-sm">
+                          <FileText className="w-4 h-4 mr-1" />
+                          Files
+                        </TabsTrigger>
+                        <TabsTrigger value="activity" className="text-xs lg:text-sm">
+                          <Activity className="w-4 h-4 mr-1" />
+                          Activity
+                        </TabsTrigger>
+                        <TabsTrigger value="chat" className="text-xs lg:text-sm">
+                          <MessageCircle className="w-4 h-4 mr-1" />
+                          Chat
+                        </TabsTrigger>
+                      </TabsList>
+
+                      {/* Overview Tab */}
+                      <TabsContent value="overview" className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                            <p className="text-sm text-gray-600 mb-1">Progress</p>
+                            <p className="text-3xl font-bold text-blue-600">{selectedProject.progress}%</p>
+                            <Progress value={selectedProject.progress} className="h-2 mt-2" />
+                          </div>
+                          {selectedProject.expected_delivery && (
+                            <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+                              <p className="text-sm text-gray-600 mb-1">Expected Delivery</p>
+                              <p className="text-lg font-semibold text-purple-700">
+                                {new Date(selectedProject.expected_delivery).toLocaleDateString('en-US', { 
+                                  year: 'numeric', 
+                                  month: 'long', 
+                                  day: 'numeric' 
+                                })}
+                              </p>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    </div>
 
-                    {/* Expected Delivery */}
-                    {project.expected_delivery && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                        <Calendar className="w-5 h-5 text-blue-600" />
-                        <span className="font-medium">Expected Delivery:</span>
-                        <span className="font-semibold text-blue-700">{new Date(project.expected_delivery).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                      </div>
-                    )}
-
-                    {/* Expanded View */}
-                    {selectedProject?.id === project.id && (
-                      <div className="mt-6 pt-6 border-t-2 border-purple-100 space-y-6 animate-in slide-in-from-top duration-300">
-                        {/* Notes */}
-                        {project.notes && (
+                        {selectedProject.notes && (
                           <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-5">
-                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-lg">
+                            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
                               <FileText className="w-5 h-5 text-purple-600" />
                               Notes from Project Manager
                             </h4>
                             <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
-                              {project.notes}
+                              {selectedProject.notes}
                             </p>
                           </div>
                         )}
+                      </TabsContent>
 
-                        {/* Files */}
-                        {project.files && project.files.length > 0 && (
-                          <div>
-                            <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-lg">
-                              <FileText className="w-5 h-5 text-indigo-600" />
-                              Project Files
-                              <Badge className="bg-indigo-100 text-indigo-700">{project.files.length}</Badge>
-                            </h4>
-                            <div className="space-y-3">
-                              {project.files.map((file) => (
-                                <div
-                                  key={file.id}
-                                  className="flex items-center justify-between bg-gradient-to-r from-white to-indigo-50 border-2 border-indigo-200 p-4 rounded-xl hover:shadow-lg transition-all"
-                                  data-testid={`project-file-${file.id}`}
-                                >
-                                  <div className="flex items-center gap-4 flex-1">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md">
-                                      <FileText className="w-6 h-6 text-white" />
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-bold text-gray-900">{file.filename}</p>
-                                      <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                      {/* Milestones Tab */}
+                      <TabsContent value="milestones" className="space-y-4">
+                        {selectedProject.milestones && selectedProject.milestones.length > 0 ? (
+                          selectedProject.milestones.map((milestone) => (
+                            <div key={milestone.id} className="bg-white border-2 border-gray-200 rounded-lg p-4">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-gray-900">{milestone.title}</h4>
+                                  {milestone.description && (
+                                    <p className="text-sm text-gray-600 mt-1">{milestone.description}</p>
+                                  )}
+                                </div>
+                                <Badge className={getMilestoneStatus(milestone.status)}>
+                                  {milestone.status}
+                                </Badge>
+                              </div>
+                              {milestone.due_date && (
+                                <p className="text-xs text-gray-500 flex items-center gap-1 mt-2">
+                                  <Calendar className="w-3 h-3" />
+                                  Due: {new Date(milestone.due_date).toLocaleDateString()}
+                                </p>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-500 py-8">No milestones defined yet</p>
+                        )}
+                      </TabsContent>
+
+                      {/* Tasks Tab */}
+                      <TabsContent value="tasks" className="space-y-4">
+                        {selectedProject.tasks && selectedProject.tasks.length > 0 ? (
+                          selectedProject.tasks.map((task) => (
+                            <div key={task.id} className="bg-white border-2 border-gray-200 rounded-lg p-4">
+                              <div className="flex items-start justify-between">
+                                <div className="flex items-start gap-3 flex-1">
+                                  <CheckCircle2 
+                                    className={`w-5 h-5 mt-0.5 ${
+                                      task.status === 'completed' ? 'text-green-600' : 'text-gray-400'
+                                    }`} 
+                                  />
+                                  <div className="flex-1">
+                                    <h4 className={`font-semibold ${
+                                      task.status === 'completed' ? 'line-through text-gray-500' : 'text-gray-900'
+                                    }`}>
+                                      {task.title}
+                                    </h4>
+                                    {task.description && (
+                                      <p className="text-sm text-gray-600 mt-1">{task.description}</p>
+                                    )}
+                                    {task.due_date && (
+                                      <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
                                         <Calendar className="w-3 h-3" />
-                                        Uploaded {new Date(file.uploaded_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                        Due: {new Date(task.due_date).toLocaleDateString()}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                                <Badge className={getTaskStatus(task.status)}>
+                                  {task.status}
+                                </Badge>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-500 py-8">No tasks assigned yet</p>
+                        )}
+                      </TabsContent>
+
+                      {/* Team Tab */}
+                      <TabsContent value="team" className="space-y-4">
+                        {selectedProject.team_members && selectedProject.team_members.length > 0 ? (
+                          selectedProject.team_members.map((member, idx) => (
+                            <div key={idx} className="bg-white border-2 border-gray-200 rounded-lg p-4 flex items-center gap-4">
+                              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center">
+                                <User className="w-6 h-6 text-white" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-gray-900">{member.admin_name}</h4>
+                                {member.role && (
+                                  <p className="text-sm text-gray-600">{member.role}</p>
+                                )}
+                                <p className="text-xs text-gray-500 mt-1">
+                                  Added {new Date(member.added_at).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-500 py-8">No team members assigned yet</p>
+                        )}
+                      </TabsContent>
+
+                      {/* Budget Tab */}
+                      <TabsContent value="budget">
+                        {selectedProject.budget ? (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Total Budget</p>
+                                <p className="text-2xl font-bold text-blue-600">
+                                  {selectedProject.budget.currency} {selectedProject.budget.total_amount.toLocaleString()}
+                                </p>
+                              </div>
+                              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Paid</p>
+                                <p className="text-2xl font-bold text-green-600">
+                                  {selectedProject.budget.currency} {selectedProject.budget.paid_amount.toLocaleString()}
+                                </p>
+                              </div>
+                              <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+                                <p className="text-sm text-gray-600 mb-1">Pending</p>
+                                <p className="text-2xl font-bold text-orange-600">
+                                  {selectedProject.budget.currency} {selectedProject.budget.pending_amount.toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
+                            {selectedProject.budget.payment_terms && (
+                              <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
+                                <h4 className="font-semibold text-gray-900 mb-2">Payment Terms</h4>
+                                <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                                  {selectedProject.budget.payment_terms}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-center text-gray-500 py-8">No budget information available</p>
+                        )}
+                      </TabsContent>
+
+                      {/* Files Tab */}
+                      <TabsContent value="files" className="space-y-4">
+                        {selectedProject.files && selectedProject.files.length > 0 ? (
+                          selectedProject.files.map((file) => (
+                            <div
+                              key={file.id}
+                              className="flex items-center justify-between bg-gradient-to-r from-white to-indigo-50 border-2 border-indigo-200 p-4 rounded-xl hover:shadow-lg transition-all"
+                              data-testid={`project-file-${file.id}`}
+                            >
+                              <div className="flex items-center gap-4 flex-1">
+                                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md">
+                                  <FileText className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-bold text-gray-900">{file.filename}</p>
+                                  <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                                    <Calendar className="w-3 h-3" />
+                                    Uploaded {new Date(file.uploaded_at).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                onClick={() => downloadFile(selectedProject.id, file.id, file.filename)}
+                                className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md"
+                                data-testid={`download-file-btn-${file.id}`}
+                              >
+                                <Download className="w-4 h-4" />
+                                Download
+                              </Button>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-500 py-8">No files uploaded yet</p>
+                        )}
+                      </TabsContent>
+
+                      {/* Activity Tab */}
+                      <TabsContent value="activity" className="space-y-3 max-h-[500px] overflow-y-auto">
+                        {selectedProject.activity_log && selectedProject.activity_log.length > 0 ? (
+                          selectedProject.activity_log.map((activity) => (
+                            <div key={activity.id} className="bg-white border-l-4 border-purple-500 p-4 rounded-r-lg">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900">{activity.description}</p>
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    by {activity.user_name} • {new Date(activity.timestamp).toLocaleString()}
+                                  </p>
+                                </div>
+                                <Badge variant="outline">{activity.action}</Badge>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-500 py-8">No activity yet</p>
+                        )}
+                      </TabsContent>
+
+                      {/* Chat Tab */}
+                      <TabsContent value="chat">
+                        <div className="space-y-4">
+                          {/* Chat Messages */}
+                          <div className="bg-white border-2 border-gray-200 rounded-lg p-4 h-[400px] overflow-y-auto">
+                            {chatMessages.length > 0 ? (
+                              <div className="space-y-4">
+                                {chatMessages.map((msg) => (
+                                  <div
+                                    key={msg.id}
+                                    className={`flex ${msg.sender_type === 'client' ? 'justify-end' : 'justify-start'}`}
+                                  >
+                                    <div
+                                      className={`max-w-[70%] rounded-lg p-3 ${
+                                        msg.sender_type === 'client'
+                                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
+                                          : 'bg-gray-100 text-gray-900'
+                                      }`}
+                                    >
+                                      <p className="text-xs font-semibold mb-1 opacity-80">
+                                        {msg.sender_name}
+                                      </p>
+                                      <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                      <p className="text-xs mt-1 opacity-70">
+                                        {new Date(msg.created_at).toLocaleTimeString()}
                                       </p>
                                     </div>
                                   </div>
-                                  <Button
-                                    size="sm"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      downloadFile(project.id, file.id, file.filename);
-                                    }}
-                                    className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md"
-                                    data-testid={`download-file-btn-${file.id}`}
-                                  >
-                                    <Download className="w-4 h-4" />
-                                    Download
-                                  </Button>
-                                </div>
-                              ))}
-                            </div>
+                                ))}
+                                <div ref={chatEndRef} />
+                              </div>
+                            ) : (
+                              <div className="flex items-center justify-center h-full">
+                                <p className="text-gray-500">No messages yet. Start a conversation!</p>
+                              </div>
+                            )}
                           </div>
-                        )}
 
-                        {/* Help Section */}
-                        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-xl p-4">
-                          <p className="text-sm text-gray-700">
-                            <span className="font-semibold">💡 Tip:</span> Click the Download button to save project files to your device. If you have any questions about this project, please contact your project manager.
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Testimonials Section */}
-        <div className="mt-12">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-gray-900">Your Testimonials</h2>
-              <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-3 py-1">
-                {myTestimonials.length}
-              </Badge>
-            </div>
-            <Button
-              onClick={() => setShowTestimonialForm(!showTestimonialForm)}
-              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg"
-              data-testid="submit-testimonial-btn"
-            >
-              <MessageSquare className="w-4 h-4" />
-              {showTestimonialForm ? 'Cancel' : 'Submit Testimonial'}
-            </Button>
-          </div>
-
-          {/* Testimonial Form */}
-          {showTestimonialForm && (
-            <Card className="border-2 border-purple-200 shadow-lg mb-6 bg-gradient-to-br from-white to-purple-50">
-              <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
-                <CardTitle className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-purple-600" />
-                  Share Your Experience
-                </CardTitle>
-                <CardDescription>
-                  Tell us about your experience working with us. Your feedback helps us improve!
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <form onSubmit={handleSubmitTestimonial} className="space-y-6">
-                  {/* Role Field */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Your Role (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={testimonialForm.role}
-                      onChange={(e) => setTestimonialForm({ ...testimonialForm, role: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="e.g., CEO, Marketing Director"
-                      data-testid="testimonial-role-input"
-                    />
-                  </div>
-
-                  {/* Rating */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Your Rating <span className="text-red-500">*</span>
-                    </label>
-                    <div className="flex items-center gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => setTestimonialForm({ ...testimonialForm, rating: star })}
-                          onMouseEnter={() => setHoveredRating(star)}
-                          onMouseLeave={() => setHoveredRating(0)}
-                          className="focus:outline-none transition-transform hover:scale-110"
-                          data-testid={`testimonial-rating-${star}`}
-                        >
-                          <Star
-                            className={`w-8 h-8 ${
-                              star <= (hoveredRating || testimonialForm.rating)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            } transition-colors duration-150`}
-                          />
-                        </button>
-                      ))}
-                      <span className="ml-4 text-lg text-gray-700 font-medium">
-                        {testimonialForm.rating} {testimonialForm.rating === 1 ? 'Star' : 'Stars'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Message Field */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Your Testimonial <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      value={testimonialForm.message}
-                      onChange={(e) => setTestimonialForm({ ...testimonialForm, message: e.target.value })}
-                      required
-                      rows="6"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                      placeholder="Share your experience working with us... (minimum 10 characters)"
-                      data-testid="testimonial-message-input"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      {testimonialForm.message.length}/500 characters
-                    </p>
-                  </div>
-
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    disabled={submittingTestimonial}
-                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 shadow-lg"
-                    data-testid="submit-testimonial-form-btn"
-                  >
-                    {submittingTestimonial ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        <span>Submitting...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5" />
-                        <span>Submit Testimonial</span>
-                      </>
-                    )}
-                  </Button>
-
-                  <p className="text-center text-sm text-gray-500">
-                    Your testimonial will be reviewed by the admin before being published.
-                  </p>
-                </form>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Testimonials List */}
-          {myTestimonials.length === 0 ? (
-            <Card className="border-2 border-dashed border-gray-300 bg-white">
-              <CardContent className="py-16 text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MessageSquare className="w-10 h-10 text-purple-400" />
-                </div>
-                <p className="text-xl font-semibold text-gray-700 mb-2">No testimonials yet</p>
-                <p className="text-sm text-gray-500 max-w-md mx-auto mb-4">
-                  Share your experience by submitting a testimonial. Your feedback is valuable to us!
-                </p>
-                <Button
-                  onClick={() => setShowTestimonialForm(true)}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
-                >
-                  Submit Your First Testimonial
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-6">
-              {myTestimonials.map((testimonial) => (
-                <Card
-                  key={testimonial.id}
-                  className="border-2 hover:shadow-lg transition-all bg-white"
-                  data-testid={`testimonial-card-${testimonial.id}`}
-                >
-                  <CardHeader className="border-b bg-gradient-to-r from-gray-50 to-purple-50">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-5 h-5 ${
-                                i < testimonial.rating
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-gray-300'
-                              }`}
+                          {/* Chat Input */}
+                          <form onSubmit={handleSendMessage} className="flex gap-2">
+                            <Textarea
+                              value={chatMessage}
+                              onChange={(e) => setChatMessage(e.target.value)}
+                              placeholder="Type your message..."
+                              className="flex-1"
+                              rows={2}
+                              disabled={sendingMessage}
                             />
-                          ))}
+                            <Button
+                              type="submit"
+                              disabled={sendingMessage || !chatMessage.trim()}
+                              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                            >
+                              <Send className="w-4 h-4" />
+                            </Button>
+                          </form>
                         </div>
-                        {testimonial.role && (
-                          <CardDescription>{testimonial.role}</CardDescription>
-                        )}
-                      </div>
-                      <Badge 
-                        className={`${
-                          testimonial.status === 'approved' 
-                            ? 'bg-green-100 text-green-800 border-green-300' 
-                            : testimonial.status === 'rejected'
-                            ? 'bg-red-100 text-red-800 border-red-300'
-                            : 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                        } border`}
-                        data-testid={`testimonial-status-${testimonial.id}`}
-                      >
-                        {testimonial.status === 'approved' && <CheckCircle2 className="w-3 h-3 mr-1" />}
-                        {testimonial.status === 'pending' && <Clock className="w-3 h-3 mr-1" />}
-                        {testimonial.status.charAt(0).toUpperCase() + testimonial.status.slice(1)}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-6">
-                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                      {testimonial.message}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-4">
-                      Submitted on {new Date(testimonial.created_at).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
-                    </p>
+                      </TabsContent>
+                    </Tabs>
                   </CardContent>
                 </Card>
-              ))}
+              ) : (
+                <Card className="border-2 border-gray-300">
+                  <CardContent className="py-16 text-center">
+                    <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-xl text-gray-500">Select a project to view details</p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );
