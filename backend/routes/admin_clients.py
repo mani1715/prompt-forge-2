@@ -132,7 +132,7 @@ async def update_client(client_id: str, client_data: ClientUpdate, admin = Depen
         email=updated_client['email'],
         company=updated_client.get('company'),
         phone=updated_client.get('phone'),
-        is_active=updated_client['is_active'],
+        is_active=updated_client.get('is_active', True),  # Default to True if not set
         created_at=updated_client['created_at'] if isinstance(updated_client['created_at'], str) else updated_client['created_at'].isoformat()
     )
 
