@@ -190,6 +190,7 @@ class ClientProjectResponse(BaseModel):
     tasks: List[TaskResponse] = []
     files: List[ProjectFileResponse] = []
     comments: List[CommentResponse] = []
+    chat_messages: List['ChatMessageResponse'] = []  # New chat feature
     activity_log: List[ActivityResponse] = []
     team_members: List[TeamMemberResponse] = []
     budget: Optional[BudgetResponse] = None
