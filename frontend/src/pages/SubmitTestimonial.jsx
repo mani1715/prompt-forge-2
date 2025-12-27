@@ -52,7 +52,7 @@ const SubmitTestimonial = () => {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/testimonials/submit`, {
+      const response = await api.post('/testimonials/submit', {
         name: formData.name.trim(),
         role: formData.role.trim() || null,
         company: formData.company.trim() || null,
