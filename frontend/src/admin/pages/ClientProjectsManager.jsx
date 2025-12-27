@@ -875,10 +875,10 @@ export default function ClientProjectsManager() {
                   </TabsContent>
 
                   {/* Chat Tab */}
-                  <TabsContent value="chat">
-                    <div className="space-y-4">
+                  <TabsContent value="chat" className="space-y-4">
+                    <div className="flex flex-col h-[500px]">
                       {/* Chat Messages */}
-                      <div className="bg-gray-50 border rounded-lg p-4 h-[400px] overflow-y-auto">
+                      <div className="bg-gray-50 border rounded-lg p-4 flex-1 overflow-y-auto mb-4">
                         {chatMessages.length > 0 ? (
                           <div className="space-y-4">
                             {chatMessages.map((msg) => (
@@ -907,7 +907,7 @@ export default function ClientProjectsManager() {
                           </div>
                         ) : (
                           <div className="flex items-center justify-center h-full">
-                            <p className="text-gray-500">No messages yet</p>
+                            <p className="text-gray-500 text-sm">No messages yet</p>
                           </div>
                         )}
                       </div>
@@ -921,10 +921,12 @@ export default function ClientProjectsManager() {
                           className="flex-1"
                           rows={2}
                           disabled={sendingMessage}
+                          data-testid="admin-chat-input"
                         />
                         <Button
                           type="submit"
                           disabled={sendingMessage || !chatMessage.trim()}
+                          data-testid="admin-send-message-btn"
                         >
                           <Send className="w-4 h-4" />
                         </Button>
