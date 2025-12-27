@@ -1277,6 +1277,12 @@ a {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+    padding-bottom: 5rem; /* Extra padding on mobile to avoid chat widget */
+  }
+  
+  .footer-bottom-links {
+    padding-right: 0; /* Remove right padding on mobile */
+    justify-content: center;
   }
   
   /* Cards & Containers */
