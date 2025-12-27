@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""
+Script to create super admin in the admins collection
+Uses environment variables for MongoDB connection
+"""
+import asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
+from auth import hash_password
+import uuid
+from datetime import datetime
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load environment variables
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+async def create_super_admin():
+    # Get MongoDB URI from environment
+    mongodb_uri = os.environ.get('MONGODB_URI')
+    db_name = os.environ.get('DB_NAME', 'mspn_dev_db')
+    
+    if not mongodb_uri:
+        print("❌ Error: MONGODB_URI environment variable is not set!")
+        print("Please set MONGODB_URI in your .env file")
+        return
+    
+    # Connect to MongoDB
+    client = AsyncIOMotorClient(mongodb_uri)
+    db = client[db_name]
+    admins_collection = db['admins']
+    
+    # Check if admin already exists
+    existing_admin = await admins_collection.find_one({"username": "admin"})
+    
+    if existing_admin:
+        print("Super admin already exists!")
+        print(f"Username: {existing_admin['username']}")
+        client.close()
+        return
+    
+    # Create super admin
+    admin_user = {
+        "id": str(uuid.uuid4()),
+        "username": "admin",
+        "password_hash": hash_password("admin123"),
+        "role": "super_admin",
+        "permissions": {
+            "canManageAdmins": True,
+            "canManageAbout": True,
+            "canManagePortfolio": True,
+            "canManageBlogs": True,
+            "canManageTestimonials": True,
+            "canManageDemos": True,
+            "canViewContacts": True,
+            "canManageContactPage": True,
+            "canManageChat": True,
+            "canManageNewsletter": True,
+            "canManageBookings": True,
+            "canManageBookingSettings": True,
+            "canManagePricing": True,
+            "canViewAnalytics": True,
+            "canManageClients": True,
+            "canManageClientProjects": True,
+            "canAccessStorage": True,
+            "canManageNotes": True,
+            "canManageSettings": True,
+            "canViewPrivateProjects": True
+        },
+        "created_at": datetime.utcnow().isoformat(),
+        "created_by": "system"
+    }
+    
+    await admins_collection.insert_one(admin_user)
+    print("✅ Super admin created successfully!")
+    print(f"Username: admin")
+    print(f"Password: admin123")
+    print("\n⚠️  IMPORTANT: Change this password after first login!")
+    
+    client.close()
+
+if __name__ == "__main__":
+    asyncio.run(create_super_admin())
