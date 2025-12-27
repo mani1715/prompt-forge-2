@@ -14,6 +14,15 @@ export default function ClientDashboard() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [showTestimonialForm, setShowTestimonialForm] = useState(false);
+  const [myTestimonials, setMyTestimonials] = useState([]);
+  const [testimonialForm, setTestimonialForm] = useState({
+    role: '',
+    message: '',
+    rating: 5
+  });
+  const [submittingTestimonial, setSubmittingTestimonial] = useState(false);
+  const [hoveredRating, setHoveredRating] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('client_token');
