@@ -158,13 +158,13 @@ const clientService = {
   // ========== CHAT (ADMIN) ==========
   // Send chat message to client (Admin)
   sendAdminChatMessage: async (projectId, message) => {
-    const response = await api.post(`/admin/client-projects/${projectId}/chat/`, { message });
+    const response = await api.post(`/admin/client-projects/${projectId}/chat`, { message });
     return response.data;
   },
 
   // Get chat messages (Admin)
   getAdminChatMessages: async (projectId) => {
-    const response = await api.get(`/admin/client-projects/${projectId}/chat/`);
+    const response = await api.get(`/admin/client-projects/${projectId}/chat`);
     return response.data;
   },
 
