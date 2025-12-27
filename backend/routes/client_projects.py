@@ -112,27 +112,7 @@ async def get_my_projects(client = Depends(get_current_client)):
     """Get all projects assigned to the current client"""
     projects = []
     async for project_doc in client_projects_collection.find({"client_id": client["id"]}):
-        projects.append(ClientProjectResponse(
-            id=project_doc['id'],
-            name=project_doc['name'],
-            client_id=project_doc['client_id'],
-            description=project_doc.get('description'),
-            status=project_doc['status'],
-            progress=project_doc['progress'],
-            expected_delivery=str(project_doc['expected_delivery']) if project_doc.get('expected_delivery') else None,
-            notes=project_doc.get('notes'),
-            files=[
-                ProjectFileResponse(
-                    id=f['id'],
-                    filename=f['filename'],
-                    file_path=f['file_path'],
-                    uploaded_at=f['uploaded_at'] if isinstance(f['uploaded_at'], str) else f['uploaded_at'].isoformat(),
-                    uploaded_by=f['uploaded_by']
-                ) for f in project_doc.get('files', [])
-            ],
-            created_at=project_doc['created_at'] if isinstance(project_doc['created_at'], str) else project_doc['created_at'].isoformat(),
-            updated_at=project_doc.get('updated_at')
-        ))
+        projects.append(convert_project_to_response(project_doc))
     return projects
 
 @router.get("/{project_id}", response_model=ClientProjectResponse)
@@ -149,27 +129,54 @@ async def get_project(project_id: str, client = Depends(get_current_client)):
             detail="Project not found or not assigned to you"
         )
     
-    return ClientProjectResponse(
-        id=project_doc['id'],
-        name=project_doc['name'],
-        client_id=project_doc['client_id'],
-        description=project_doc.get('description'),
-        status=project_doc['status'],
-        progress=project_doc['progress'],
-        expected_delivery=str(project_doc['expected_delivery']) if project_doc.get('expected_delivery') else None,
-        notes=project_doc.get('notes'),
-        files=[
-            ProjectFileResponse(
-                id=f['id'],
-                filename=f['filename'],
-                file_path=f['file_path'],
-                uploaded_at=f['uploaded_at'] if isinstance(f['uploaded_at'], str) else f['uploaded_at'].isoformat(),
-                uploaded_by=f['uploaded_by']
-            ) for f in project_doc.get('files', [])
-        ],
-        created_at=project_doc['created_at'] if isinstance(project_doc['created_at'], str) else project_doc['created_at'].isoformat(),
-        updated_at=project_doc.get('updated_at')
+    return convert_project_to_response(project_doc)
+
+@router.post("/{project_id}/comments", response_model=CommentResponse)
+async def add_comment(project_id: str, comment_data: CommentCreate, client = Depends(get_current_client)):
+    """Add a comment to project (Client)"""
+    project_doc = await client_projects_collection.find_one({
+        "id": project_id,
+        "client_id": client["id"]
+    })
+    
+    if not project_doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found or not assigned to you"
+        )
+    
+    comment = ProjectComment(
+        user_id=client["id"],
+        user_name=client.get("name", "Client"),
+        user_type="client",
+        message=comment_data.message
     )
+    
+    comment_dict = comment.model_dump()
+    comment_dict['created_at'] = comment_dict['created_at'].isoformat()
+    
+    # Add activity log
+    activity = ProjectActivity(
+        action="comment_added",
+        description=f"{client.get('name', 'Client')} added a comment",
+        user_id=client["id"],
+        user_name=client.get("name", "Client")
+    )
+    activity_dict = activity.model_dump()
+    activity_dict['timestamp'] = activity_dict['timestamp'].isoformat()
+    
+    await client_projects_collection.update_one(
+        {"id": project_id},
+        {
+            "$push": {
+                "comments": comment_dict,
+                "activity_log": activity_dict
+            },
+            "$set": {"last_activity_at": datetime.utcnow().isoformat()}
+        }
+    )
+    
+    return CommentResponse(**comment_dict)
 
 @router.get("/{project_id}/files/{file_id}/download")
 async def download_project_file(
