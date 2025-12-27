@@ -4,7 +4,8 @@ from typing import List
 from schemas.client_project import (
     ClientProjectResponse, CommentCreate, CommentResponse,
     MilestoneResponse, TaskResponse, ProjectFileResponse,
-    ActivityResponse, TeamMemberResponse, BudgetResponse
+    ActivityResponse, TeamMemberResponse, BudgetResponse,
+    ChatMessageCreate, ChatMessageResponse
 )
 from database import client_projects_collection
 from auth.client_auth import get_current_client
