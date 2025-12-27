@@ -5,7 +5,7 @@ from schemas.client_project import (
     FileUploadResponse, ProjectFileResponse, MilestoneCreate, MilestoneUpdate,
     MilestoneResponse, TaskCreate, TaskUpdate, TaskResponse, CommentCreate,
     CommentResponse, TeamMemberAdd, TeamMemberResponse, BudgetUpdate,
-    BudgetResponse, ActivityResponse
+    BudgetResponse, ActivityResponse, ChatMessageCreate, ChatMessageResponse
 )
 from database import client_projects_collection, clients_collection, admins_collection
 from auth.admin_auth import get_current_admin
