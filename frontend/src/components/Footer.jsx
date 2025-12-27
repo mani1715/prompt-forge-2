@@ -302,26 +302,11 @@ const Footer = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="footer-bottom" style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '16px',
-          '@media (min-width: 768px)': {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }
-        }}>
+        <div className="footer-bottom">
           <p className="footer-copyright">
             © {currentYear} {agencyInfo.name}. All rights reserved.
           </p>
-          <div className="footer-bottom-links" style={{ 
-            display: 'flex', 
-            gap: '20px', 
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            paddingRight: '100px' // Add padding to avoid chat widget overlap
-          }}>
+          <div className="footer-bottom-links">
             <span className="footer-link">Privacy Policy</span>
             <span className="footer-link">Terms of Service</span>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
