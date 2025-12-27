@@ -1,12 +1,111 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import FileResponse
 from typing import List
-from schemas.client_project import ClientProjectResponse, ProjectFileResponse
+from schemas.client_project import (
+    ClientProjectResponse, CommentCreate, CommentResponse,
+    MilestoneResponse, TaskResponse, ProjectFileResponse,
+    ActivityResponse, TeamMemberResponse, BudgetResponse
+)
 from database import client_projects_collection
 from auth.client_auth import get_current_client
+from models.client_project import ProjectComment, ProjectActivity
+from datetime import datetime
 import os
 
 router = APIRouter(prefix="/client/projects", tags=["client-projects"])
+
+def convert_project_to_response(project_doc) -> ClientProjectResponse:
+    """Helper function to convert project document to response"""
+    return ClientProjectResponse(
+        id=project_doc['id'],
+        name=project_doc['name'],
+        client_id=project_doc['client_id'],
+        description=project_doc.get('description'),
+        status=project_doc['status'],
+        priority=project_doc.get('priority', 'medium'),
+        progress=project_doc['progress'],
+        start_date=str(project_doc['start_date']) if project_doc.get('start_date') else None,
+        expected_delivery=str(project_doc['expected_delivery']) if project_doc.get('expected_delivery') else None,
+        actual_delivery=str(project_doc['actual_delivery']) if project_doc.get('actual_delivery') else None,
+        notes=project_doc.get('notes'),
+        milestones=[
+            MilestoneResponse(
+                id=m['id'],
+                title=m['title'],
+                description=m.get('description'),
+                due_date=str(m['due_date']) if m.get('due_date') else None,
+                status=m['status'],
+                completion_date=m.get('completion_date'),
+                order=m.get('order', 0),
+                created_at=m['created_at'] if isinstance(m['created_at'], str) else m['created_at'].isoformat()
+            ) for m in project_doc.get('milestones', [])
+        ],
+        tasks=[
+            TaskResponse(
+                id=t['id'],
+                title=t['title'],
+                description=t.get('description'),
+                status=t['status'],
+                priority=t.get('priority', 'medium'),
+                assigned_to=t.get('assigned_to'),
+                due_date=str(t['due_date']) if t.get('due_date') else None,
+                completed_at=t.get('completed_at'),
+                milestone_id=t.get('milestone_id'),
+                created_at=t['created_at'] if isinstance(t['created_at'], str) else t['created_at'].isoformat()
+            ) for t in project_doc.get('tasks', [])
+        ],
+        files=[
+            ProjectFileResponse(
+                id=f['id'],
+                filename=f['filename'],
+                file_path=f['file_path'],
+                uploaded_at=f['uploaded_at'] if isinstance(f['uploaded_at'], str) else f['uploaded_at'].isoformat(),
+                uploaded_by=f['uploaded_by'],
+                file_size=f.get('file_size', 0),
+                file_type=f.get('file_type')
+            ) for f in project_doc.get('files', [])
+        ],
+        comments=[
+            CommentResponse(
+                id=c['id'],
+                user_id=c['user_id'],
+                user_name=c['user_name'],
+                user_type=c['user_type'],
+                message=c['message'],
+                created_at=c['created_at'] if isinstance(c['created_at'], str) else c['created_at'].isoformat()
+            ) for c in project_doc.get('comments', [])
+        ],
+        activity_log=[
+            ActivityResponse(
+                id=a['id'],
+                action=a['action'],
+                description=a['description'],
+                user_id=a['user_id'],
+                user_name=a['user_name'],
+                timestamp=a['timestamp'] if isinstance(a['timestamp'], str) else a['timestamp'].isoformat(),
+                metadata=a.get('metadata')
+            ) for a in project_doc.get('activity_log', [])
+        ],
+        team_members=[
+            TeamMemberResponse(
+                admin_id=tm['admin_id'],
+                admin_name=tm['admin_name'],
+                role=tm.get('role'),
+                added_at=tm['added_at'] if isinstance(tm['added_at'], str) else tm['added_at'].isoformat()
+            ) for tm in project_doc.get('team_members', [])
+        ],
+        budget=BudgetResponse(
+            total_amount=project_doc.get('budget', {}).get('total_amount', 0.0),
+            currency=project_doc.get('budget', {}).get('currency', 'USD'),
+            paid_amount=project_doc.get('budget', {}).get('paid_amount', 0.0),
+            pending_amount=project_doc.get('budget', {}).get('pending_amount', 0.0),
+            payment_terms=project_doc.get('budget', {}).get('payment_terms')
+        ) if project_doc.get('budget') else None,
+        tags=project_doc.get('tags', []),
+        created_at=project_doc['created_at'] if isinstance(project_doc['created_at'], str) else project_doc['created_at'].isoformat(),
+        updated_at=project_doc.get('updated_at'),
+        last_activity_at=project_doc.get('last_activity_at')
+    )
 
 @router.get("/", response_model=List[ClientProjectResponse])
 async def get_my_projects(client = Depends(get_current_client)):
