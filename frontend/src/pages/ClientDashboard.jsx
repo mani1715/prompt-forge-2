@@ -434,6 +434,212 @@ export default function ClientDashboard() {
             </div>
           )}
         </div>
+
+        {/* Testimonials Section */}
+        <div className="mt-12">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-gray-900">Your Testimonials</h2>
+              <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-3 py-1">
+                {myTestimonials.length}
+              </Badge>
+            </div>
+            <Button
+              onClick={() => setShowTestimonialForm(!showTestimonialForm)}
+              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg"
+              data-testid="submit-testimonial-btn"
+            >
+              <MessageSquare className="w-4 h-4" />
+              {showTestimonialForm ? 'Cancel' : 'Submit Testimonial'}
+            </Button>
+          </div>
+
+          {/* Testimonial Form */}
+          {showTestimonialForm && (
+            <Card className="border-2 border-purple-200 shadow-lg mb-6 bg-gradient-to-br from-white to-purple-50">
+              <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-purple-600" />
+                  Share Your Experience
+                </CardTitle>
+                <CardDescription>
+                  Tell us about your experience working with us. Your feedback helps us improve!
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <form onSubmit={handleSubmitTestimonial} className="space-y-6">
+                  {/* Role Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Your Role (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={testimonialForm.role}
+                      onChange={(e) => setTestimonialForm({ ...testimonialForm, role: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="e.g., CEO, Marketing Director"
+                      data-testid="testimonial-role-input"
+                    />
+                  </div>
+
+                  {/* Rating */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Your Rating <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setTestimonialForm({ ...testimonialForm, rating: star })}
+                          onMouseEnter={() => setHoveredRating(star)}
+                          onMouseLeave={() => setHoveredRating(0)}
+                          className="focus:outline-none transition-transform hover:scale-110"
+                          data-testid={`testimonial-rating-${star}`}
+                        >
+                          <Star
+                            className={`w-8 h-8 ${
+                              star <= (hoveredRating || testimonialForm.rating)
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-gray-300'
+                            } transition-colors duration-150`}
+                          />
+                        </button>
+                      ))}
+                      <span className="ml-4 text-lg text-gray-700 font-medium">
+                        {testimonialForm.rating} {testimonialForm.rating === 1 ? 'Star' : 'Stars'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Message Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Your Testimonial <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={testimonialForm.message}
+                      onChange={(e) => setTestimonialForm({ ...testimonialForm, message: e.target.value })}
+                      required
+                      rows="6"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                      placeholder="Share your experience working with us... (minimum 10 characters)"
+                      data-testid="testimonial-message-input"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {testimonialForm.message.length}/500 characters
+                    </p>
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    disabled={submittingTestimonial}
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 shadow-lg"
+                    data-testid="submit-testimonial-form-btn"
+                  >
+                    {submittingTestimonial ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        <span>Submitting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        <span>Submit Testimonial</span>
+                      </>
+                    )}
+                  </Button>
+
+                  <p className="text-center text-sm text-gray-500">
+                    Your testimonial will be reviewed by the admin before being published.
+                  </p>
+                </form>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Testimonials List */}
+          {myTestimonials.length === 0 ? (
+            <Card className="border-2 border-dashed border-gray-300 bg-white">
+              <CardContent className="py-16 text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageSquare className="w-10 h-10 text-purple-400" />
+                </div>
+                <p className="text-xl font-semibold text-gray-700 mb-2">No testimonials yet</p>
+                <p className="text-sm text-gray-500 max-w-md mx-auto mb-4">
+                  Share your experience by submitting a testimonial. Your feedback is valuable to us!
+                </p>
+                <Button
+                  onClick={() => setShowTestimonialForm(true)}
+                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
+                >
+                  Submit Your First Testimonial
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-6">
+              {myTestimonials.map((testimonial) => (
+                <Card
+                  key={testimonial.id}
+                  className="border-2 hover:shadow-lg transition-all bg-white"
+                  data-testid={`testimonial-card-${testimonial.id}`}
+                >
+                  <CardHeader className="border-b bg-gradient-to-r from-gray-50 to-purple-50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-5 h-5 ${
+                                i < testimonial.rating
+                                  ? 'fill-yellow-400 text-yellow-400'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        {testimonial.role && (
+                          <CardDescription>{testimonial.role}</CardDescription>
+                        )}
+                      </div>
+                      <Badge 
+                        className={`${
+                          testimonial.status === 'approved' 
+                            ? 'bg-green-100 text-green-800 border-green-300' 
+                            : testimonial.status === 'rejected'
+                            ? 'bg-red-100 text-red-800 border-red-300'
+                            : 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                        } border`}
+                        data-testid={`testimonial-status-${testimonial.id}`}
+                      >
+                        {testimonial.status === 'approved' && <CheckCircle2 className="w-3 h-3 mr-1" />}
+                        {testimonial.status === 'pending' && <Clock className="w-3 h-3 mr-1" />}
+                        {testimonial.status.charAt(0).toUpperCase() + testimonial.status.slice(1)}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {testimonial.message}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-4">
+                      Submitted on {new Date(testimonial.created_at).toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
