@@ -309,6 +309,52 @@ const Footer = () => {
           <div className="footer-bottom-links">
             <span className="footer-link">Privacy Policy</span>
             <span className="footer-link">Terms of Service</span>
+            <div style={{ display: 'flex', gap: '16px', marginLeft: 'auto', alignItems: 'center' }}>
+              <Link
+                to="/client/login"
+                className="footer-link"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '6px',
+                  background: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  color: '#FFFFFF',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
+                }}
+                title="Client Portal"
+                data-testid="footer-client-login"
+              >
+                <Mail className="h-4 w-4" />
+                Client Portal
+              </Link>
+              <Link
+                to="/admin/login"
+                className="footer-link"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '6px',
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  color: '#FFFFFF',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                }}
+                title="Admin Panel"
+                data-testid="footer-admin-login"
+              >
+                <Shield className="h-4 w-4" />
+                Admin Panel
+              </Link>
+            </div>
           </div>
         </div>
       </div>
