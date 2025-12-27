@@ -24,7 +24,7 @@ class TestimonialCreate(BaseModel):
 
     @validator('source')
     def validate_source(cls, v):
-        valid_sources = ["customer_submitted", "admin_created", "email", "social_media"]
+        valid_sources = ["client_portal", "public_submitted", "admin_created", "email", "social_media"]
         if v not in valid_sources:
             raise ValueError(f'Source must be one of: {", ".join(valid_sources)}')
         return v
