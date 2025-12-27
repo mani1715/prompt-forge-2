@@ -532,7 +532,7 @@ export default function ClientProjectsManager() {
                 />
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="pt-4 border-t mt-4">
               <Button type="button" variant="outline" onClick={handleCloseDialog}>
                 Cancel
               </Button>
