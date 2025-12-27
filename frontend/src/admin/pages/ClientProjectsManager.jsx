@@ -43,6 +43,14 @@ export default function ClientProjectsManager() {
   const [sendingMessage, setSendingMessage] = useState(false);
   const chatEndRef = useRef(null);
 
+  // Enhanced features state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [clientFilter, setClientFilter] = useState('all');
+  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [showStats, setShowStats] = useState(true);
+
   // Milestone/Task/Team/Budget Dialog States
   const [milestoneDialog, setMilestoneDialog] = useState({ open: false, data: null });
   const [taskDialog, setTaskDialog] = useState({ open: false, data: null });
