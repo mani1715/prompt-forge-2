@@ -58,7 +58,7 @@ def convert_project_to_response(project_doc) -> ClientProjectResponse:
                 status=m['status'],
                 completion_date=m.get('completion_date'),
                 order=m.get('order', 0),
-                created_at=m['created_at'] if isinstance(m['created_at'], str) else m['created_at'].isoformat()
+                created_at=m.get('created_at', datetime.utcnow().isoformat()) if isinstance(m.get('created_at'), str) else (m.get('created_at').isoformat() if m.get('created_at') else datetime.utcnow().isoformat())
             ) for m in project_doc.get('milestones', [])
         ],
         tasks=[
