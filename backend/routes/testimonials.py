@@ -66,8 +66,9 @@ async def submit_testimonial(testimonial: TestimonialSubmit):
             "rating": testimonial.rating,
             "image": None,  # Image can be added by admin later
             "status": "pending",  # All customer submissions start as pending
-            "source": "customer_submitted",
-            "verified": True,  # Verified as from customer
+            "source": "public_submitted",
+            "verified": False,
+            "client_id": None,
             "created_at": now,
             "updated_at": now
         }
