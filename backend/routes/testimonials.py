@@ -199,3 +199,69 @@ async def delete_testimonial(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting testimonial: {str(e)}")
+
+
+# ================================
+# CLIENT ROUTES (JWT Protected)
+# ================================
+
+@router.post("/client/submit", response_model=dict, status_code=201)
+async def submit_client_testimonial(
+    testimonial: TestimonialSubmit,
+    current_client: dict = Depends(get_current_client)
+):
+    """Endpoint for authenticated clients to submit testimonials"""
+    try:
+        # Get client information
+        client_doc = await clients_collection.find_one({"id": current_client["id"]})
+        if not client_doc:
+            raise HTTPException(status_code=404, detail="Client not found")
+        
+        testimonial_id = str(uuid.uuid4())
+        now = datetime.utcnow()
+        
+        # Use client's actual information
+        testimonial_dict = {
+            "id": testimonial_id,
+            "name": client_doc["name"],
+            "role": testimonial.role or "",
+            "company": client_doc.get("company", ""),
+            "email": client_doc["email"],
+            "message": testimonial.message,
+            "rating": testimonial.rating,
+            "image": None,  # Image can be added by admin later
+            "status": "pending",  # All client submissions start as pending
+            "source": "client_portal",
+            "verified": True,  # Verified as from authenticated client
+            "client_id": current_client["id"],
+            "created_at": now,
+            "updated_at": now
+        }
+        
+        await testimonials_collection.insert_one(testimonial_dict)
+        
+        return {
+            "message": "Thank you for your testimonial! It has been submitted for review.",
+            "id": testimonial_id,
+            "status": "pending"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error submitting testimonial: {str(e)}")
+
+
+@router.get("/client/my-testimonials", response_model=List[TestimonialResponse])
+async def get_my_testimonials(current_client: dict = Depends(get_current_client)):
+    """Get all testimonials submitted by the current client"""
+    try:
+        testimonials = []
+        async for testimonial in testimonials_collection.find({"client_id": current_client["id"]}):
+            testimonials.append(testimonial_helper(testimonial))
+        
+        # Sort by created_at descending (newest first)
+        testimonials.sort(key=lambda x: x["created_at"], reverse=True)
+        
+        return testimonials
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching testimonials: {str(e)}")
