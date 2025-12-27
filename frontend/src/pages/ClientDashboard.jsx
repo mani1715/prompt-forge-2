@@ -358,16 +358,25 @@ export default function ClientDashboard() {
                 </div>
               </div>
             </div>
-            <Button
-              variant="outline"
-              onClick={handleLogout}
-              className="flex items-center gap-2 border-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 transition-all"
-              data-testid="client-logout-btn"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
-          </div>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setShowTestimonialDialog(true)}
+                className="flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-white shadow-md hover:shadow-lg transition-all"
+                data-testid="submit-testimonial-btn"
+              >
+                <Star className="w-4 h-4 fill-current" />
+                Submit Testimonial
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="flex items-center gap-2 border-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 transition-all"
+                data-testid="client-logout-btn"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </div>
         </div>
       </header>
 
