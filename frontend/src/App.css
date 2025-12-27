@@ -784,6 +784,7 @@ a {
   color: white;
   padding: 3rem 2rem 1.5rem;
   margin-top: 4rem;
+  z-index: 10;
   overflow: hidden;
 }
 
