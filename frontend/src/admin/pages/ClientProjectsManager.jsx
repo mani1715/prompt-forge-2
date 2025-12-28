@@ -212,7 +212,7 @@ export default function ClientProjectsManager() {
       }
     } catch (error) {
       console.error('Error deleting project:', error);
-      toast.error('Failed to delete project');
+      toast.error(getErrorMessage(error, 'Failed to delete project'));
     }
   };
 
