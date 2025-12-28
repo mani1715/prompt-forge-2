@@ -1521,6 +1521,9 @@ function TeamDialog({ open, data, onClose, onSave }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Team Member</DialogTitle>
+          <DialogDescription>
+            Assign an admin user to this project as a team member
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4">
