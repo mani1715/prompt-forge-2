@@ -631,19 +631,45 @@ export default function ClientDashboard() {
                 <Card className="border-2 border-purple-200 shadow-lg">
                   <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
                     <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-2xl flex items-center gap-2">
+                      <div className="flex-1">
+                        <CardTitle className="text-2xl flex items-center gap-2 flex-wrap">
                           {selectedProject.name}
                           <Sparkles className="w-5 h-5 text-purple-500" />
                         </CardTitle>
                         <CardDescription className="mt-2">
                           {selectedProject.description || 'No description provided'}
                         </CardDescription>
+                        <div className="flex flex-wrap items-center gap-2 mt-3">
+                          <Badge className={`${getStatusColor(selectedProject.status)} px-3 py-1.5 font-semibold flex items-center gap-1.5`}>
+                            {getStatusIcon(selectedProject.status)}
+                            {getStatusLabel(selectedProject.status)}
+                          </Badge>
+                          {selectedProject.priority && (
+                            <Badge className={`${getPriorityColor(selectedProject.priority)} px-3 py-1.5 font-semibold flex items-center gap-1.5`}>
+                              {getPriorityIcon(selectedProject.priority)}
+                              Priority: {selectedProject.priority}
+                            </Badge>
+                          )}
+                          {selectedProject.tags && selectedProject.tags.length > 0 && (
+                            selectedProject.tags.map((tag, idx) => (
+                              <Badge key={idx} className="bg-gray-100 text-gray-700 border border-gray-300 px-2 py-1 text-xs flex items-center gap-1">
+                                <Tag className="w-3 h-3" />
+                                {tag}
+                              </Badge>
+                            ))
+                          )}
+                        </div>
                       </div>
-                      <Badge className={`${getStatusColor(selectedProject.status)} px-3 py-1.5 font-semibold flex items-center gap-1.5`}>
-                        {getStatusIcon(selectedProject.status)}
-                        {getStatusLabel(selectedProject.status)}
-                      </Badge>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleExportProject(selectedProject)}
+                        className="flex items-center gap-2 ml-2"
+                        data-testid="export-project-btn"
+                      >
+                        <DownloadIcon className="w-4 h-4" />
+                        Export
+                      </Button>
                     </div>
                   </CardHeader>
 
