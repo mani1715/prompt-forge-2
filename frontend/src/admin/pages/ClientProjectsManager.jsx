@@ -1286,6 +1286,9 @@ function MilestoneDialog({ open, data, onClose, onSave }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{data ? 'Edit Milestone' : 'Add Milestone'}</DialogTitle>
+          <DialogDescription>
+            {data ? 'Update milestone details and status' : 'Create a new milestone for this project'}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 py-4">
