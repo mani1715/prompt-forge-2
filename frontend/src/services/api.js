@@ -18,6 +18,7 @@ const getApiBaseUrl = () => {
   console.log('[API Config] Environment:', process.env.NODE_ENV);
   console.log('[API Config] REACT_APP_BACKEND_URL:', backendUrl);
   console.log('[API Config] Current origin:', window.location.origin);
+  console.log('[API Config] Current protocol:', window.location.protocol);
   
   // Case 1: No environment variable set - use default relative path
   if (!backendUrl || backendUrl.trim() === '') {
@@ -27,6 +28,13 @@ const getApiBaseUrl = () => {
   
   // Case 2: Relative path (local development with K8s/Docker)
   if (backendUrl.startsWith('/')) {
+    // IMPORTANT: In production HTTPS environments, ensure we use absolute URL with HTTPS
+    // to avoid mixed content errors
+    if (window.location.protocol === 'https:') {
+      const absoluteUrl = `${window.location.origin}${backendUrl}`;
+      console.log('[API Config] ✅ Using absolute HTTPS URL:', absoluteUrl);
+      return absoluteUrl;
+    }
     console.log('[API Config] ✅ Using relative path:', backendUrl);
     return backendUrl;
   }
