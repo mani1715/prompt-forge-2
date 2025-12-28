@@ -2,18 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User } from 'lucide-react';
 import axios from 'axios';
+import { getBackendURL } from '../../lib/utils';
 import '../admin.css';
-
-const getBackendURL = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-  
-  // If backendUrl is empty, use relative path /api (works with Kubernetes ingress)
-  if (!backendUrl || backendUrl.trim() === '') {
-    return '/api';
-  }
-  
-  return backendUrl.endsWith('/api') ? backendUrl : `${backendUrl}/api`;
-};
 
 const BACKEND_URL = getBackendURL();
 
