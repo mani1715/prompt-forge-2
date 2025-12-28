@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Trash2, Edit, File, Code, FileText, Save, X, Upload, CheckCircle, Loader, XCircle } from 'lucide-react';
 import axios from 'axios';
+import { getBackendURL } from '../../lib/utils';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+const BACKEND_URL = getBackendURL();
 
 const StorageManager = () => {
   const [items, setItems] = useState([]);
