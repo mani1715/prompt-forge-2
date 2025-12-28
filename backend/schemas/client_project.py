@@ -21,6 +21,14 @@ class MilestoneCreate(BaseModel):
     due_date: Optional[date] = None
     status: str = "pending"
     order: int = 0
+    
+    @field_validator('due_date', mode='before')
+    @classmethod
+    def empty_str_to_none(cls, v):
+        """Convert empty strings to None for date fields"""
+        if v == '' or v is None:
+            return None
+        return v
 
 class MilestoneUpdate(BaseModel):
     """Schema for updating milestone"""
