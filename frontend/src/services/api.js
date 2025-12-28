@@ -38,19 +38,23 @@ api.interceptors.request.use(
     // Determine the correct base URL with proper protocol
     let baseURL = backendUrl;
     
-    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+    if (typeof window !== 'undefined') {
       // Page is loaded over HTTPS - ensure all API calls use HTTPS
       if (backendUrl.startsWith('/')) {
-        // Relative URL - use current origin with HTTPS
+        // Relative URL - use current origin (automatically handles protocol)
         baseURL = `${window.location.origin}${backendUrl}`;
-      } else if (backendUrl.startsWith('http://')) {
-        // HTTP URL - upgrade to HTTPS
+        console.log('[API Request] Using origin-based URL:', baseURL);
+      } else if (window.location.protocol === 'https:' && backendUrl.startsWith('http://')) {
+        // HTTP URL but page is HTTPS - upgrade to HTTPS
         baseURL = backendUrl.replace('http://', 'https://');
-      } else if (!backendUrl.startsWith('https://')) {
-        // No protocol specified - add HTTPS
-        baseURL = `https://${backendUrl}`;
+        console.log('[API Request] Upgraded to HTTPS URL:', baseURL);
+      } else if (!backendUrl.startsWith('http://') && !backendUrl.startsWith('https://')) {
+        // No protocol specified - use same protocol as page
+        baseURL = `${window.location.protocol}//${backendUrl}`;
+        console.log('[API Request] Added protocol:', baseURL);
+      } else {
+        console.log('[API Request] Using configured URL:', baseURL);
       }
-      console.log('[API Request] Using HTTPS URL:', baseURL);
     }
     
     // Set the base URL for this request
