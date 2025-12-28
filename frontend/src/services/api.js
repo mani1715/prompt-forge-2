@@ -60,6 +60,14 @@ api.interceptors.request.use(
     // Set the base URL for this request
     config.baseURL = baseURL;
     
+    // CRITICAL FIX: If the final URL in config.url is still using wrong protocol, fix it
+    if (config.url && typeof window !== 'undefined' && window.location.protocol === 'https:') {
+      if (config.url.startsWith('http://')) {
+        config.url = config.url.replace('http://', 'https://');
+        console.log('[API Request] Fixed URL protocol to HTTPS:', config.url);
+      }
+    }
+    
     // Check for both admin and client tokens
     const token = localStorage.getItem('admin_token') || 
                   localStorage.getItem('adminToken') || 
