@@ -106,19 +106,19 @@ const clientService = {
   // ========== TASKS ==========
   // Add task to project
   addTask: async (projectId, taskData) => {
-    const response = await api.post(`/admin/client-projects/${projectId}/tasks/`, taskData);
+    const response = await api.post(`/admin/client-projects/${projectId}/tasks`, taskData);
     return response.data;
   },
 
   // Update task
   updateTask: async (projectId, taskId, taskData) => {
-    const response = await api.put(`/admin/client-projects/${projectId}/tasks/${taskId}/`, taskData);
+    const response = await api.put(`/admin/client-projects/${projectId}/tasks/${taskId}`, taskData);
     return response.data;
   },
 
   // Delete task
   deleteTask: async (projectId, taskId) => {
-    const response = await api.delete(`/admin/client-projects/${projectId}/tasks/${taskId}/`);
+    const response = await api.delete(`/admin/client-projects/${projectId}/tasks/${taskId}`, taskData);
     return response.data;
   },
 
