@@ -2,16 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Save, RotateCcw, Sparkles } from 'lucide-react';
+import { getBackendURL } from '../../lib/utils';
 
-const getAPIURL = () => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-  if (!backendUrl || backendUrl.trim() === '') {
-    return '';  // Use relative path, API calls already have /api prefix
-  }
-  return backendUrl;
-};
-
-const API_URL = getAPIURL();
+const API_URL = getBackendURL();
 
 const ContentEditor = () => {
   const [content, setContent] = useState(null);
