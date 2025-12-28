@@ -194,28 +194,7 @@ export default function ClientProjectsManager() {
       handleCloseDialog();
     } catch (error) {
       console.error('Error saving project:', error);
-      
-      // Handle different error formats
-      let errorMessage = 'Failed to save project';
-      
-      if (error.response?.data?.detail) {
-        const detail = error.response.data.detail;
-        
-        // If detail is an array (validation errors)
-        if (Array.isArray(detail)) {
-          errorMessage = detail.map(err => err.msg || err).join(', ');
-        } 
-        // If detail is a string
-        else if (typeof detail === 'string') {
-          errorMessage = detail;
-        }
-        // If detail is an object
-        else if (typeof detail === 'object') {
-          errorMessage = detail.msg || JSON.stringify(detail);
-        }
-      }
-      
-      toast.error(errorMessage);
+      toast.error(getErrorMessage(error, 'Failed to save project'));
     }
   };
 
