@@ -2,10 +2,10 @@
 
 ## Access the Application
 
-**Preview URL**: https://network-debug-3.preview.emergentagent.com
+**Preview URL**: https://secure-network-10.preview.emergentagent.com
 
 ## Admin Login Credentials
-- **URL**: https://network-debug-3.preview.emergentagent.com/admin/login
+- **URL**: https://secure-network-10.preview.emergentagent.com/admin/login
 - **Username**: `admin`
 - **Password**: `admin123`
 - ⚠️ **Important**: Change this password after first login!
