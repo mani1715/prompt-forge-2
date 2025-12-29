@@ -2,10 +2,10 @@
 
 ## Access the Application
 
-**Preview URL**: https://api-secure-update.preview.emergentagent.com
+**Preview URL**: https://code-craft-57.preview.emergentagent.com
 
 ## Admin Login Credentials
-- **URL**: https://api-secure-update.preview.emergentagent.com/admin/login
+- **URL**: https://code-craft-57.preview.emergentagent.com/admin/login
 - **Username**: `admin`
 - **Password**: `admin123`
 - ⚠️ **Important**: Change this password after first login!

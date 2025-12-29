@@ -20,7 +20,7 @@ const getBaseURL = () => {
 };
 
 const api = axios.create({
-  baseURL: getBaseURL(),  // e.g., "https://api-secure-update.preview.emergentagent.com/api"
+  baseURL: getBaseURL(),  // e.g., "https://code-craft-57.preview.emergentagent.com/api"
   headers: { 'Content-Type': 'application/json' },
   timeout: 15000
 });
@@ -40,7 +40,7 @@ baseURL: '/api'  // Relative URL - supposed to inherit protocol but didn't work
 **After:**
 ```javascript
 baseURL: getBaseURL()  // Explicit full URL with correct protocol
-// Returns: "https://api-secure-update.preview.emergentagent.com/api" on HTTPS pages
+// Returns: "https://code-craft-57.preview.emergentagent.com/api" on HTTPS pages
 // Returns: "http://localhost:3000/api" on local dev
 ```
 
@@ -48,13 +48,13 @@ baseURL: getBaseURL()  // Explicit full URL with correct protocol
 
 ## How It Works
 
-1. **Page Loads**: `https://api-secure-update.preview.emergentagent.com/client/dashboard`
+1. **Page Loads**: `https://code-craft-57.preview.emergentagent.com/client/dashboard`
 2. **getBaseURL() Executes**:
    - Reads `window.location.protocol` → `'https:'`
    - Reads `window.location.host` → `'api-secure-update.preview.emergentagent.com'`
-   - Constructs: `'https://api-secure-update.preview.emergentagent.com/api'`
+   - Constructs: `'https://code-craft-57.preview.emergentagent.com/api'`
 3. **API Call Made**: `api.get('/client/projects')`
-4. **Full URL**: `https://api-secure-update.preview.emergentagent.com/api/client/projects`
+4. **Full URL**: `https://code-craft-57.preview.emergentagent.com/api/client/projects`
 5. **Result**: ✅ HTTPS request from HTTPS page - No Mixed Content error!
 
 ---
@@ -65,8 +65,8 @@ When you open the client dashboard, you should see:
 
 ```
 [API Config] Page protocol: https:
-[API Config] Constructed baseURL: https://api-secure-update.preview.emergentagent.com/api
-[API Request] GET https://api-secure-update.preview.emergentagent.com/api/client/projects
+[API Config] Constructed baseURL: https://code-craft-57.preview.emergentagent.com/api
+[API Request] GET https://code-craft-57.preview.emergentagent.com/api/client/projects
 ```
 
 **You should NO LONGER see:**
@@ -88,15 +88,15 @@ When you open the client dashboard, you should see:
 - Go to **Console** tab
 
 ### 3. Navigate to Client Dashboard
-- Go to: `https://api-secure-update.preview.emergentagent.com/client/dashboard`
+- Go to: `https://code-craft-57.preview.emergentagent.com/client/dashboard`
 - Login if needed
 
 ### 4. Check Console Logs
 Look for these logs (should appear without errors):
 ```
 [API Config] Page protocol: https:
-[API Config] Constructed baseURL: https://api-secure-update.preview.emergentagent.com/api
-[API Request] GET https://api-secure-update.preview.emergentagent.com/api/client/projects
+[API Config] Constructed baseURL: https://code-craft-57.preview.emergentagent.com/api
+[API Request] GET https://code-craft-57.preview.emergentagent.com/api/client/projects
 ```
 
 ### 5. Check Network Tab
