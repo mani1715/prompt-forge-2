@@ -156,7 +156,7 @@ async def seed_complete_portfolio():
             "tech_stack": ["React", "D3.js", "Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "Kubernetes"],
             "featured": True,
             "is_private": False,
-            "live_demo_url": "#",
+            "live_demo_url": "/demo/analytics",
             "github_url": "",
             "case_study_content": "Built a powerful real-time analytics platform with interactive charts and graphs using D3.js, custom report builder, data export functionality, user behavior tracking, A/B testing analytics, conversion funnel visualization, and predictive analytics using machine learning. Processes 10M+ events daily with sub-second query times. Deployed on Kubernetes for auto-scaling.",
             "status": "completed",
@@ -177,7 +177,7 @@ async def seed_complete_portfolio():
             "tech_stack": ["React", "Node.js", "MongoDB", "Redis", "Bull Queue", "Socket.io", "OAuth2"],
             "featured": True,
             "is_private": False,
-            "live_demo_url": "#",
+            "live_demo_url": "/demo/social-media",
             "github_url": "",
             "case_study_content": "Developed a comprehensive social media management platform with post scheduling across Facebook, Twitter, Instagram, LinkedIn, content calendar with drag-and-drop, engagement analytics with sentiment analysis, team collaboration tools, hashtag suggestions using AI, best time to post recommendations, and bulk import/export. Integrated with major social platforms using OAuth2. Serves 2,000+ businesses managing 50+ social accounts each.",
             "status": "completed",
@@ -187,6 +187,27 @@ async def seed_complete_portfolio():
                 "businesses": "2,000+",
                 "posts": "100K+ monthly",
                 "engagement": "60% increase"
+            }
+        },
+        {
+            "title": "Hotel Management System",
+            "slug": "hotel-management-system",
+            "category": "Hospitality",
+            "description": "Comprehensive hotel booking and management platform with real-time availability, reservation management, guest profiles, and analytics dashboard for hospitality businesses.",
+            "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&h=800&fit=crop",
+            "tech_stack": ["React", "Node.js", "MongoDB", "Stripe", "Google Maps API", "Socket.io"],
+            "featured": True,
+            "is_private": False,
+            "live_demo_url": "/demo/hospitality",
+            "github_url": "",
+            "case_study_content": "Developed a full-featured hotel management system with property listings, room inventory management, real-time booking engine, dynamic pricing, guest management with profiles and preferences, automated email confirmations, payment processing with Stripe, occupancy analytics, revenue management dashboard, and multi-property support. Serves 50+ hotels with 95% booking accuracy and 99.5% uptime.",
+            "status": "completed",
+            "client_name": "LuxeStay Hotel Group",
+            "completion_date": "2024-03",
+            "metrics": {
+                "hotels": "50+ properties",
+                "bookings": "250K+ annually",
+                "revenue": "180% increase"
             }
         }
     ]
