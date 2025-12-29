@@ -18,6 +18,17 @@ router = APIRouter(prefix="/client/projects", tags=["client-projects"])
 
 def convert_project_to_response(project_doc) -> ClientProjectResponse:
     """Helper function to convert project document to response"""
+    from datetime import datetime
+    
+    # Helper function to safely get datetime string
+    def get_datetime_str(obj, key, default=None):
+        val = obj.get(key)
+        if not val:
+            return default
+        if isinstance(val, str):
+            return val
+        return val.isoformat()
+    
     return ClientProjectResponse(
         id=project_doc['id'],
         name=project_doc['name'],
@@ -32,79 +43,79 @@ def convert_project_to_response(project_doc) -> ClientProjectResponse:
         notes=project_doc.get('notes'),
         milestones=[
             MilestoneResponse(
-                id=m['id'],
-                title=m['title'],
+                id=m.get('id', str(i)),
+                title=m.get('title', ''),
                 description=m.get('description'),
                 due_date=str(m['due_date']) if m.get('due_date') else None,
-                status=m['status'],
+                status=m.get('status', 'pending'),
                 completion_date=m.get('completion_date'),
                 order=m.get('order', 0),
-                created_at=m['created_at'] if isinstance(m['created_at'], str) else m['created_at'].isoformat()
-            ) for m in project_doc.get('milestones', [])
+                created_at=get_datetime_str(m, 'created_at', datetime.utcnow().isoformat())
+            ) for i, m in enumerate(project_doc.get('milestones', []))
         ],
         tasks=[
             TaskResponse(
-                id=t['id'],
-                title=t['title'],
+                id=t.get('id', str(i)),
+                title=t.get('title', ''),
                 description=t.get('description'),
-                status=t['status'],
+                status=t.get('status', 'todo'),
                 priority=t.get('priority', 'medium'),
                 assigned_to=t.get('assigned_to'),
                 due_date=str(t['due_date']) if t.get('due_date') else None,
                 completed_at=t.get('completed_at'),
                 milestone_id=t.get('milestone_id'),
-                created_at=t['created_at'] if isinstance(t['created_at'], str) else t['created_at'].isoformat()
-            ) for t in project_doc.get('tasks', [])
+                created_at=get_datetime_str(t, 'created_at', datetime.utcnow().isoformat())
+            ) for i, t in enumerate(project_doc.get('tasks', []))
         ],
         files=[
             ProjectFileResponse(
-                id=f['id'],
-                filename=f['filename'],
-                file_path=f['file_path'],
-                uploaded_at=f['uploaded_at'] if isinstance(f['uploaded_at'], str) else f['uploaded_at'].isoformat(),
-                uploaded_by=f['uploaded_by'],
+                id=f.get('id', str(i)),
+                filename=f.get('filename', 'file'),
+                file_path=f.get('file_path', ''),
+                uploaded_at=get_datetime_str(f, 'uploaded_at', datetime.utcnow().isoformat()),
+                uploaded_by=f.get('uploaded_by', 'system'),
                 file_size=f.get('file_size', 0),
                 file_type=f.get('file_type')
-            ) for f in project_doc.get('files', [])
+            ) for i, f in enumerate(project_doc.get('files', []))
         ],
         comments=[
             CommentResponse(
-                id=c['id'],
-                user_id=c['user_id'],
-                user_name=c['user_name'],
-                user_type=c['user_type'],
-                message=c['message'],
-                created_at=c['created_at'] if isinstance(c['created_at'], str) else c['created_at'].isoformat()
-            ) for c in project_doc.get('comments', [])
+                id=c.get('id', str(i)),
+                user_id=c.get('user_id', ''),
+                user_name=c.get('user_name', 'User'),
+                user_type=c.get('user_type', 'client'),
+                message=c.get('message', ''),
+                created_at=get_datetime_str(c, 'created_at', datetime.utcnow().isoformat())
+            ) for i, c in enumerate(project_doc.get('comments', []))
         ],
         chat_messages=[
             ChatMessageResponse(
-                id=cm['id'],
-                sender_id=cm['sender_id'],
-                sender_name=cm['sender_name'],
-                sender_type=cm['sender_type'],
-                message=cm['message'],
+                id=cm.get('id', str(i)),
+                sender_id=cm.get('sender_id', ''),
+                sender_name=cm.get('sender_name', 'User'),
+                sender_type=cm.get('sender_type', 'client'),
+                message=cm.get('message', ''),
                 read=cm.get('read', False),
-                created_at=cm['created_at'] if isinstance(cm['created_at'], str) else cm['created_at'].isoformat()
-            ) for cm in project_doc.get('chat_messages', [])
+                created_at=get_datetime_str(cm, 'created_at', datetime.utcnow().isoformat())
+            ) for i, cm in enumerate(project_doc.get('chat_messages', []))
         ],
         activity_log=[
             ActivityResponse(
-                id=a['id'],
-                action=a['action'],
-                description=a['description'],
-                user_id=a['user_id'],
-                user_name=a['user_name'],
-                timestamp=a['timestamp'] if isinstance(a['timestamp'], str) else a['timestamp'].isoformat(),
+                id=a.get('id', str(i)),
+                action=a.get('action', 'unknown'),
+                description=a.get('description', ''),
+                user_id=a.get('user_id', ''),
+                user_name=a.get('user_name', 'System'),
+                timestamp=get_datetime_str(a, 'timestamp', datetime.utcnow().isoformat()),
                 metadata=a.get('metadata')
-            ) for a in project_doc.get('activity_log', [])
+            ) for i, a in enumerate(project_doc.get('activity_log', []))
         ],
         team_members=[
             TeamMemberResponse(
-                admin_id=tm['admin_id'],
-                admin_name=tm['admin_name'],
+                admin_id=tm.get('admin_id', ''),
+                admin_name=tm.get('admin_name', 'Admin'),
                 role=tm.get('role'),
-                added_at=tm['added_at'] if isinstance(tm['added_at'], str) else tm['added_at'].isoformat()
+                added_at=get_datetime_str(tm, 'added_at', datetime.utcnow().isoformat())
             ) for tm in project_doc.get('team_members', [])
         ],
         budget=BudgetResponse(
@@ -115,7 +126,7 @@ def convert_project_to_response(project_doc) -> ClientProjectResponse:
             payment_terms=project_doc.get('budget', {}).get('payment_terms')
         ) if project_doc.get('budget') else None,
         tags=project_doc.get('tags', []),
-        created_at=project_doc['created_at'] if isinstance(project_doc['created_at'], str) else project_doc['created_at'].isoformat(),
+        created_at=get_datetime_str(project_doc, 'created_at', datetime.utcnow().isoformat()),
         updated_at=project_doc.get('updated_at'),
         last_activity_at=project_doc.get('last_activity_at')
     )
