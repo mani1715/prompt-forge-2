@@ -9,8 +9,16 @@ import axios from 'axios';
  * - Uses relative URLs for proper routing through ingress
  */
 
-// Get backend URL from environment variable
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '/api';
+// Get backend URL from environment variable and ensure HTTPS protocol safety
+let BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '/api';
+
+// CRITICAL FIX: Force HTTPS if page is served over HTTPS and baseURL has HTTP
+if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+  if (BACKEND_URL.startsWith('http://')) {
+    BACKEND_URL = BACKEND_URL.replace('http://', 'https://');
+    console.warn('[API] Upgraded HTTP baseURL to HTTPS:', BACKEND_URL);
+  }
+}
 
 // Create axios instance with proper baseURL
 const api = axios.create({
