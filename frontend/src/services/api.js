@@ -43,7 +43,7 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-// Add token to requests
+// Add token to requests and ENFORCE HTTPS
 api.interceptors.request.use(
   (config) => {
     // Check for both admin and client tokens
@@ -55,8 +55,30 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
+    // CRITICAL FIX: Enforce HTTPS protocol when page is HTTPS
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+      // Fix baseURL if it's HTTP
+      if (config.baseURL && config.baseURL.startsWith('http://')) {
+        config.baseURL = config.baseURL.replace('http://', 'https://');
+        console.warn('[API] Upgraded HTTP baseURL to HTTPS in interceptor:', config.baseURL);
+      }
+      
+      // Fix full URL if it was constructed with HTTP
+      if (config.url && config.url.startsWith('http://')) {
+        config.url = config.url.replace('http://', 'https://');
+        console.warn('[API] Upgraded HTTP URL to HTTPS in interceptor:', config.url);
+      }
+    }
+    
+    // Construct the full URL for logging
+    let fullUrl = config.url;
+    if (config.baseURL && !config.url.startsWith('http://') && !config.url.startsWith('https://')) {
+      fullUrl = config.baseURL + (config.url.startsWith('/') ? '' : '/') + config.url;
+    }
+    
     // Log request for debugging
-    console.log('[API Request]', config.method?.toUpperCase(), config.baseURL + config.url);
+    console.log('[API Request]', config.method?.toUpperCase(), fullUrl);
+    console.log('[API] Protocol:', window.location.protocol, '| BaseURL:', config.baseURL);
     
     return config;
   },
