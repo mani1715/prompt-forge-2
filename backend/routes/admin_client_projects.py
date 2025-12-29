@@ -13,6 +13,7 @@ from models.client_project import (
     ClientProject, ProjectFile, ProjectMilestone, ProjectTask,
     ProjectComment, ProjectActivity, TeamMember, Budget, ChatMessage
 )
+from utils.currency_converter import get_all_currencies, convert_currency, format_currency, get_currency_info
 from datetime import datetime
 import os
 import uuid
