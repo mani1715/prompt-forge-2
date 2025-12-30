@@ -296,3 +296,76 @@ async def get_my_testimonials(current_client: dict = Depends(get_current_client)
         return testimonials
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching testimonials: {str(e)}")
+
+
+@router.get("/client/project/{project_id}/testimonial", response_model=dict)
+async def get_project_testimonial(
+    project_id: str,
+    current_client: dict = Depends(get_current_client)
+):
+    """Get testimonial for a specific project"""
+    try:
+        # Verify project belongs to this client
+        project_doc = await client_projects_collection.find_one({
+            "id": project_id,
+            "client_id": current_client["id"]
+        })
+        if not project_doc:
+            raise HTTPException(status_code=404, detail="Project not found")
+        
+        # Get testimonial
+        testimonial_doc = await testimonials_collection.find_one({
+            "client_id": current_client["id"],
+            "project_id": project_id
+        })
+        
+        if not testimonial_doc:
+            return {"exists": False, "testimonial": None}
+        
+        return {
+            "exists": True,
+            "testimonial": testimonial_helper(testimonial_doc)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching testimonial: {str(e)}")
+
+
+@router.put("/client/testimonial/{testimonial_id}", response_model=TestimonialResponse)
+async def update_client_testimonial(
+    testimonial_id: str,
+    testimonial_update: TestimonialSubmit,
+    current_client: dict = Depends(get_current_client)
+):
+    """Update client's own testimonial"""
+    try:
+        # Find existing testimonial and verify ownership
+        existing_testimonial = await testimonials_collection.find_one({
+            "id": testimonial_id,
+            "client_id": current_client["id"]
+        })
+        if not existing_testimonial:
+            raise HTTPException(status_code=404, detail="Testimonial not found or you don't have permission to edit it")
+        
+        # Prepare update data
+        update_data = {
+            "role": testimonial_update.role or "",
+            "message": testimonial_update.message,
+            "rating": testimonial_update.rating,
+            "updated_at": datetime.utcnow()
+        }
+        
+        # Update testimonial
+        await testimonials_collection.update_one(
+            {"id": testimonial_id},
+            {"$set": update_data}
+        )
+        
+        # Fetch and return updated testimonial
+        updated_testimonial = await testimonials_collection.find_one({"id": testimonial_id})
+        return testimonial_helper(updated_testimonial)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating testimonial: {str(e)}")
