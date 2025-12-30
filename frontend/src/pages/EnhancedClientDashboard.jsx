@@ -404,7 +404,7 @@ export default function EnhancedClientDashboard() {
                     {selectedProject?.id === project.id && (
                       <div className="mt-6 pt-6 border-t-2 border-purple-100">
                         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                          <TabsList className="grid w-full grid-cols-7 mb-6">
+                          <TabsList className="grid w-full grid-cols-8 mb-6">
                             <TabsTrigger value="overview">Overview</TabsTrigger>
                             <TabsTrigger value="milestones">Milestones</TabsTrigger>
                             <TabsTrigger value="tasks">Tasks</TabsTrigger>
@@ -419,6 +419,12 @@ export default function EnhancedClientDashboard() {
                                 </span>
                               )}
                             </TabsTrigger>
+                            {project.status === 'completed' && (
+                              <TabsTrigger value="testimonial">
+                                <Star className="w-4 h-4 mr-1" />
+                                Review
+                              </TabsTrigger>
+                            )}
                           </TabsList>
 
                           <TabsContent value="overview" className="space-y-6">
