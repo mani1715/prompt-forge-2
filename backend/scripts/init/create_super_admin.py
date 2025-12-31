@@ -31,8 +31,8 @@ async def create_super_admin():
     db = client[db_name]
     admins_collection = db['admins']
     
-    # Check if admin already exists
-    existing_admin = await admins_collection.find_one({"username": "admin"})
+    # Check if super admin already exists
+    existing_admin = await admins_collection.find_one({"username": "maneesh"})
     
     if existing_admin:
         print("Super admin already exists!")
@@ -43,8 +43,8 @@ async def create_super_admin():
     # Create super admin
     admin_user = {
         "id": str(uuid.uuid4()),
-        "username": "admin",
-        "password_hash": hash_password("admin123"),
+        "username": "maneesh",
+        "password_hash": hash_password("maneesh123"),
         "role": "super_admin",
         "permissions": {
             "canManageAdmins": True,
@@ -74,8 +74,8 @@ async def create_super_admin():
     
     await admins_collection.insert_one(admin_user)
     print("✅ Super admin created successfully!")
-    print(f"Username: admin")
-    print(f"Password: admin123")
+    print("Username: maneesh")
+    print("Password: maneesh123")
     print("\n⚠️  IMPORTANT: Change this password after first login!")
     
     client.close()
