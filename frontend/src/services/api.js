@@ -4,21 +4,24 @@ import axios from 'axios';
  * API SERVICE – VERCEL + RENDER SAFE
  */
 
-// Backend URL (must be full URL in production)
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Backend URL (Render service root)
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || 'https://mspn-dev.onrender.com';
 
-if (!BACKEND_URL) {
-  console.error(
-    '❌ REACT_APP_BACKEND_URL is NOT defined. Check Vercel Environment Variables.'
+if (!process.env.REACT_APP_BACKEND_URL) {
+  console.warn(
+    '⚠️ REACT_APP_BACKEND_URL not set, using fallback Render URL'
   );
 }
 
 const api = axios.create({
-  baseURL: BACKEND_URL,
+  // 👇 THIS IS THE FIX
+  baseURL: `${BACKEND_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
   timeout: 15000,
+  withCredentials: true,
 });
 
 // Attach token if exists
