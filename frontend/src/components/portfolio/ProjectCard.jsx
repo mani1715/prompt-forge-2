@@ -8,23 +8,22 @@ import './portfolio-components.css';
 const ProjectCard = ({ project }) => {
   if (!project) return null;
 
-  const {
-    id,
-    title,
-    slug,
-    category,
-    description,
-    image_url,
-    tech_stack = [],
-    featured,
-    live_demo_url,
-    github_url,
-  } = project;
+  const image =
+    project.image_url || project.image || '/placeholder-project.jpg';
+
+  const technologies =
+    project.tech_stack || project.technologies || [];
+
+  const liveDemo =
+    project.live_demo_url || project.liveUrl || project.liveLink;
+
+  const github =
+    project.github_url || project.githubLink;
 
   return (
-    <Card className="project-card-premium" data-admin-editable={`project-${id}`}>
-      {/* Featured Badge */}
-      {featured && (
+    <Card className="project-card-premium">
+      {/* Featured */}
+      {project.featured && (
         <div className="project-featured-badge">
           <Star className="h-3 w-3" fill="currentColor" />
           <span>Featured</span>
@@ -34,25 +33,30 @@ const ProjectCard = ({ project }) => {
       {/* Image */}
       <div className="project-card-image-wrapper">
         <img
-          src={image_url}
-          alt={title}
-          className="project-card-image"
+          src={image}
+          alt={project.title}
           loading="lazy"
           decoding="async"
+          width="400"
+          height="260"
+          className="project-card-image"
+          onError={(e) => {
+            e.currentTarget.src = '/placeholder-project.jpg';
+          }}
         />
 
-        {/* Hover Overlay */}
+        {/* Overlay */}
         <div className="project-card-overlay">
           <div className="project-overlay-buttons">
-            <Link to={`/portfolio/${slug || id}`}>
+            <Link to={`/portfolio/${project.slug || project.id}`}>
               <Button className="project-overlay-btn btn-view">
                 View Case Study
               </Button>
             </Link>
 
-            {live_demo_url && (
+            {liveDemo && (
               <a
-                href={live_demo_url}
+                href={liveDemo}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -65,41 +69,41 @@ const ProjectCard = ({ project }) => {
           </div>
         </div>
 
-        {/* Category */}
-        <div className="project-category-badge">{category}</div>
+        <div className="project-category-badge">
+          {project.category}
+        </div>
       </div>
 
       {/* Content */}
       <div className="project-card-content">
-        <h3 className="project-card-title">{title}</h3>
-        <p className="project-card-description">{description}</p>
+        <h3 className="project-card-title">
+          {project.title}
+        </h3>
 
-        {/* Tech Stack */}
+        <p className="project-card-description">
+          {project.description}
+        </p>
+
+        {/* Tech stack */}
         <div className="project-tech-tags">
-          {tech_stack.slice(0, 4).map((tech, idx) => (
-            <span key={idx} className="tech-tag">
+          {technologies.slice(0, 4).map((tech, i) => (
+            <span key={i} className="tech-tag">
               {tech}
             </span>
           ))}
-          {tech_stack.length > 4 && (
-            <span className="tech-tag tech-tag-more">
-              +{tech_stack.length - 4}
-            </span>
-          )}
         </div>
 
-        {/* Footer */}
         <div className="project-card-footer">
           <Link
-            to={`/portfolio/${slug || id}`}
+            to={`/portfolio/${project.slug || project.id}`}
             className="project-read-more"
           >
             View Details →
           </Link>
 
-          {github_url && (
+          {github && (
             <a
-              href={github_url}
+              href={github}
               target="_blank"
               rel="noopener noreferrer"
               className="project-github-link"
@@ -110,7 +114,7 @@ const ProjectCard = ({ project }) => {
         </div>
       </div>
 
-      <div className="project-card-gradient"></div>
+      <div className="project-card-gradient" />
     </Card>
   );
 };
