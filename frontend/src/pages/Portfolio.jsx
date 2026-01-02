@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { getBackendURL } from '../lib/utils';
-
-const BACKEND_URL = getBackendURL();
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
+  const [categories, setCategories] = useState(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -16,10 +14,19 @@ const Portfolio = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/projects/`);
-        setProjects(res.data || []);
+        const res = await api.get('/api/projects/');
+        const data = res.data || [];
+
+        setProjects(data);
+
+        const uniqueCategories = [
+          'All',
+          ...new Set(data.map((p) => p.category).filter(Boolean)),
+        ];
+
+        setCategories(uniqueCategories);
       } catch (err) {
-        console.error('Failed to fetch projects:', err);
+        console.error('❌ Failed to load projects', err);
         setError('Failed to load projects');
       } finally {
         setLoading(false);
@@ -29,22 +36,17 @@ const Portfolio = () => {
     fetchProjects();
   }, []);
 
-  const categories = [
-    'All',
-    ...new Set(projects.map(p => p.category).filter(Boolean))
-  ];
-
   const filteredProjects =
     selectedCategory === 'All'
       ? projects
-      : projects.filter(p => p.category === selectedCategory);
+      : projects.filter((p) => p.category === selectedCategory);
 
   if (loading) {
-    return <div className="page-loading">Loading projects...</div>;
+    return <div className="text-center py-20">Loading projects...</div>;
   }
 
   if (error) {
-    return <div className="page-error">{error}</div>;
+    return <div className="text-center py-20 text-red-500">{error}</div>;
   }
 
   return (
@@ -62,7 +64,7 @@ const Portfolio = () => {
       {/* Filters */}
       <section className="filter-section">
         <div className="filter-container">
-          {categories.map(category => (
+          {categories.map((category) => (
             <Button
               key={category}
               variant={selectedCategory === category ? 'default' : 'outline'}
@@ -78,10 +80,16 @@ const Portfolio = () => {
       {/* Projects */}
       <section className="portfolio-projects-section">
         <div className="portfolio-projects-grid">
-          {filteredProjects.map(project => (
+          {filteredProjects.length === 0 && (
+            <p className="text-center col-span-full">
+              No projects found.
+            </p>
+          )}
+
+          {filteredProjects.map((project) => (
             <Link
               key={project.id}
-              to={`/portfolio/${project.slug || project.id}`}
+              to={`/portfolio/${project.slug}`}
               className="portfolio-card-link"
             >
               <Card className="portfolio-card">
@@ -105,7 +113,7 @@ const Portfolio = () => {
                   </p>
 
                   <div className="portfolio-technologies">
-                    {(project.tech_stack || []).map((tech, i) => (
+                    {project.tech_stack?.map((tech, i) => (
                       <span key={i} className="portfolio-tech-tag">
                         {tech}
                       </span>
