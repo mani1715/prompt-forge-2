@@ -1,127 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import api from '../services/api';
-import { Card } from '../components/ui/card';
-import { Button } from '../components/ui/button';
+import React, { useEffect, useState, useMemo } from 'react';
+import ProjectCard from '../components/portfolio/ProjectCard';
+
+const API_URL = 'https://mspn-dev.onrender.com/api/projects/';
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
-  const [categories, setCategories] = useState(['All']);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
+    let mounted = true;
+
     const fetchProjects = async () => {
       try {
-        const res = await api.get('/api/projects/');
-        const data = res.data || [];
+        const res = await fetch(API_URL);
+        const data = await res.json();
 
-        setProjects(data);
-
-        const uniqueCategories = [
-          'All',
-          ...new Set(data.map((p) => p.category).filter(Boolean)),
-        ];
-
-        setCategories(uniqueCategories);
+        if (mounted && Array.isArray(data)) {
+          setProjects(data);
+        }
       } catch (err) {
-        console.error('❌ Failed to load projects', err);
         setError('Failed to load projects');
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
     fetchProjects();
+    return () => (mounted = false);
   }, []);
 
-  const filteredProjects =
-    selectedCategory === 'All'
-      ? projects
-      : projects.filter((p) => p.category === selectedCategory);
+  const categories = useMemo(() => {
+    return ['All', ...new Set(projects.map(p => p.category).filter(Boolean))];
+  }, [projects]);
+
+  const filteredProjects = useMemo(() => {
+    if (selectedCategory === 'All') return projects;
+    return projects.filter(p => p.category === selectedCategory);
+  }, [projects, selectedCategory]);
 
   if (loading) {
-    return <div className="text-center py-20">Loading projects...</div>;
+    return <div className="page-loader">Loading projects…</div>;
   }
 
   if (error) {
-    return <div className="text-center py-20 text-red-500">{error}</div>;
+    return <div className="page-error">{error}</div>;
   }
 
   return (
     <div className="portfolio-page">
       {/* Hero */}
       <section className="portfolio-hero">
-        <div className="portfolio-hero-content">
-          <h1 className="page-title">Our Portfolio</h1>
-          <p className="page-subtitle">
-            Explore our collection of successful projects and client solutions
-          </p>
-        </div>
+        <h1 className="page-title">Our Portfolio</h1>
+        <p className="page-subtitle">
+          Explore our successful projects and case studies
+        </p>
       </section>
 
       {/* Filters */}
       <section className="filter-section">
         <div className="filter-container">
-          {categories.map((category) => (
-            <Button
+          {categories.map(category => (
+            <button
               key={category}
-              variant={selectedCategory === category ? 'default' : 'outline'}
-              className="filter-button"
+              className={`filter-button ${
+                selectedCategory === category ? 'active' : ''
+              }`}
               onClick={() => setSelectedCategory(category)}
             >
               {category}
-            </Button>
+            </button>
           ))}
         </div>
       </section>
 
-      {/* Projects */}
+      {/* Grid */}
       <section className="portfolio-projects-section">
         <div className="portfolio-projects-grid">
-          {filteredProjects.length === 0 && (
-            <p className="text-center col-span-full">
-              No projects found.
-            </p>
-          )}
-
-          {filteredProjects.map((project) => (
-            <Link
-              key={project.id}
-              to={`/portfolio/${project.slug}`}
-              className="portfolio-card-link"
-            >
-              <Card className="portfolio-card">
-                <div className="portfolio-image">
-                  <img
-                    src={project.image_url}
-                    alt={project.title}
-                    loading="lazy"
-                  />
-                  <div className="portfolio-overlay">
-                    <span className="portfolio-category">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="portfolio-info">
-                  <h3 className="portfolio-title">{project.title}</h3>
-                  <p className="portfolio-description">
-                    {project.description}
-                  </p>
-
-                  <div className="portfolio-technologies">
-                    {project.tech_stack?.map((tech, i) => (
-                      <span key={i} className="portfolio-tech-tag">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            </Link>
+          {filteredProjects.map(project => (
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       </section>
