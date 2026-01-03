@@ -31,6 +31,13 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// Retry configuration
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 2000; // 2 seconds
+
+// Helper function to delay
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // Attach token automatically
 api.interceptors.request.use(
   (config) => {
@@ -53,11 +60,34 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Global error handling
+// Global error handling with retry logic
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    console.error('API Error:', error?.response?.data || error.message);
+  async (error) => {
+    const config = error.config;
+    
+    // Log the error with more details
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      console.error(' API Error: timeout of', API_TIMEOUT + 'ms exceeded');
+      
+      // Retry logic for timeout errors on GET requests
+      if (config && config.method === 'get' && !config._retry) {
+        config._retry = true;
+        config._retryCount = config._retryCount || 0;
+        
+        if (config._retryCount < MAX_RETRIES) {
+          config._retryCount++;
+          console.log(` Retrying request (${config._retryCount}/${MAX_RETRIES})...`);
+          await delay(RETRY_DELAY);
+          return api(config);
+        } else {
+          console.error('❌ Max retries reached. Backend might be sleeping or unavailable.');
+          console.log('💡 Tip: On Render free tier, backends sleep after 15 minutes of inactivity.');
+        }
+      }
+    } else {
+      console.error('API Error:', error?.response?.data || error.message);
+    }
 
     if (error.response?.status === 401) {
       localStorage.clear();
