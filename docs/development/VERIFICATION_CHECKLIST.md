@@ -7,7 +7,7 @@
 - Go to the **Console** tab
 
 ### 2. Navigate to Client Dashboard
-- Go to: `https://dev-portfolio-977.preview.emergentagent.com/client/dashboard`
+- Go to: `https://bug-solver-14.preview.emergentagent.com/client/dashboard`
 - Or your actual HTTPS URL
 
 ### 3. Check Console Logs (MOST IMPORTANT)
