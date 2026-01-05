@@ -52,15 +52,9 @@ const Services = () => {
         <div className="services-hero-background">
           <div className="hero-gradient-orb orb-1"></div>
           <div className="hero-gradient-orb orb-2"></div>
-          <div className="hero-sparkles">
-            <Sparkles className="sparkle sparkle-1" />
-            <Sparkles className="sparkle sparkle-2" />
-            <Sparkles className="sparkle sparkle-3" />
-          </div>
         </div>
         <div className="services-hero-container">
           <div className="services-hero-badge" data-admin-editable="services-badge">
-            <Sparkles className="badge-icon" />
             <span>What We Offer</span>
           </div>
           <h1 className="services-hero-title" data-admin-editable="services-title">
