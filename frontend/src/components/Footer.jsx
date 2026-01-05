@@ -71,100 +71,216 @@ const Footer = () => {
   };
 
   return (
-    <footer className="footer">
+    <footer className="footer" style={{ padding: '3rem 0 1.5rem' }}>
       <div className="footer-container">
         {/* Footer Top */}
-        <div className="footer-top">
-          <div className="footer-brand">
-            {/* Brand Name Only */}
-            <h3 className="footer-logo" style={{
-              color: '#FFFFFF',
-              fontWeight: '700',
-              fontSize: '32px',
-              letterSpacing: '0.5px',
-              marginBottom: '12px'
-            }}>
-              {agencyInfo.name}
-            </h3>
-            <p className="footer-tagline" style={{ color: '#D1D5DB', fontWeight: '500' }}>{agencyInfo.tagline}</p>
-            <div className="footer-social">
-              <a
-                href={agencyInfo.socialLinks.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link"
-                aria-label="GitHub"
-              >
-                <Github className="h-5 w-5" />
-              </a>
-              <a
-                href={agencyInfo.socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-              {twitterUrl && (
-                <a
-                  href={twitterUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="h-5 w-5" />
-                </a>
-              )}
-              {instagramUrl && (
-                <a
-                  href={instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-5 w-5" />
-                </a>
-              )}
-              {whatsappNumber && (
-                <button
-                  onClick={handleWhatsAppClick}
-                  className="social-link"
-                  aria-label="WhatsApp"
-                  title="Chat on WhatsApp"
-                  style={{ 
-                    background: 'transparent', 
-                    border: 'none', 
-                    cursor: 'pointer',
-                    padding: 0
-                  }}
-                >
-                  <MessageCircle className="h-5 w-5" />
-                </button>
-              )}
+        <div className="footer-top" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.5fr', gap: '2rem', marginBottom: '2rem' }}>
+          {/* Brand and Newsletter Combined */}
+          <div className="footer-brand-newsletter" style={{ gridColumn: '1 / 3' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '3rem' }}>
+              {/* Brand Section */}
+              <div style={{ flex: '1' }}>
+                <h3 className="footer-logo" style={{
+                  color: '#FFFFFF',
+                  fontWeight: '700',
+                  fontSize: '28px',
+                  letterSpacing: '0.5px',
+                  marginBottom: '10px'
+                }}>
+                  {agencyInfo.name}
+                </h3>
+                <p className="footer-tagline" style={{ color: '#D1D5DB', fontWeight: '500', marginBottom: '1rem' }}>{agencyInfo.tagline}</p>
+                <div className="footer-social">
+                  <a
+                    href={agencyInfo.socialLinks.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="GitHub"
+                  >
+                    <Github className="h-5 w-5" />
+                  </a>
+                  <a
+                    href={agencyInfo.socialLinks.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin className="h-5 w-5" />
+                  </a>
+                  {twitterUrl && (
+                    <a
+                      href={twitterUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="social-link"
+                      aria-label="Twitter"
+                    >
+                      <Twitter className="h-5 w-5" />
+                    </a>
+                  )}
+                  {instagramUrl && (
+                    <a
+                      href={instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="social-link"
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                  )}
+                  {whatsappNumber && (
+                    <button
+                      onClick={handleWhatsAppClick}
+                      className="social-link"
+                      aria-label="WhatsApp"
+                      title="Chat on WhatsApp"
+                      style={{ 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer',
+                        padding: 0
+                      }}
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Newsletter Section */}
+              <div style={{ flex: '1' }}>
+                <h4 style={{ 
+                  fontSize: '18px', 
+                  fontWeight: '700',
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  marginBottom: '10px',
+                  letterSpacing: '0.5px'
+                }}>
+                  📧 Stay Updated
+                </h4>
+                <p style={{ 
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  lineHeight: '1.5',
+                  color: '#9CA3AF',
+                  marginBottom: '12px'
+                }}>
+                  Get exclusive updates and offers.
+                </p>
+                <form onSubmit={handleNewsletterSubmit} className="newsletter-form">
+                  <div className="newsletter-input-wrapper" style={{
+                    position: 'relative',
+                    border: '2px solid rgba(139, 92, 246, 0.4)',
+                    borderRadius: '10px',
+                    background: 'rgba(139, 92, 246, 0.08)',
+                    padding: '2px',
+                    boxShadow: '0 0 15px rgba(139, 92, 246, 0.15)'
+                  }}>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Your email"
+                      className="newsletter-input"
+                      disabled={loading}
+                      style={{ 
+                        background: 'rgba(15, 22, 41, 0.9)',
+                        border: 'none',
+                        paddingRight: '45px',
+                        fontSize: '13px',
+                        padding: '10px'
+                      }}
+                    />
+                    <button 
+                      type="submit" 
+                      className="newsletter-button"
+                      disabled={loading}
+                      aria-label="Subscribe to newsletter"
+                      style={{
+                        background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                        border: 'none',
+                        boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
+                        transition: 'all 0.3s ease',
+                        padding: '8px',
+                        width: '36px',
+                        height: '36px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.5)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.boxShadow = '0 4px 14px rgba(139, 92, 246, 0.4)';
+                      }}
+                    >
+                      {loading ? (
+                        <span className="newsletter-loading">...</span>
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                  
+                  <p style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '11px',
+                    color: '#9CA3AF',
+                    fontWeight: '400',
+                    marginTop: '8px'
+                  }}>
+                    <Shield className="h-3 w-3" style={{ color: '#8B5CF6' }} />
+                    Privacy protected. Unsubscribe anytime.
+                  </p>
+
+                  {message.text && (
+                    <p style={{
+                      padding: '8px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      marginTop: '10px',
+                      fontWeight: '500',
+                      background: message.type === 'success' 
+                        ? 'rgba(16, 185, 129, 0.15)' 
+                        : 'rgba(239, 68, 68, 0.15)',
+                      border: `1px solid ${message.type === 'success' ? '#10B981' : '#EF4444'}`,
+                      color: message.type === 'success' ? '#10B981' : '#EF4444'
+                    }}>
+                      {message.text}
+                    </p>
+                  )}
+                </form>
+              </div>
             </div>
           </div>
 
-          <div className="footer-links-container">
-            <div className="footer-links-group">
-              <h4 className="footer-links-title">Quick Links</h4>
-              <ul className="footer-links-list">
-                <li><Link to="/" className="footer-link">Home</Link></li>
-                <li><Link to="/about" className="footer-link">About</Link></li>
-                <li><Link to="/portfolio" className="footer-link">Portfolio</Link></li>
-                <li><Link to="/contact" className="footer-link">Contact</Link></li>
-              </ul>
-            </div>
+          {/* Quick Links */}
+          <div className="footer-links-group">
+            <h4 className="footer-links-title">Quick Links</h4>
+            <ul className="footer-links-list">
+              <li><Link to="/" className="footer-link">Home</Link></li>
+              <li><Link to="/about" className="footer-link">About</Link></li>
+              <li><Link to="/portfolio" className="footer-link">Portfolio</Link></li>
+              <li><Link to="/contact" className="footer-link">Contact</Link></li>
+            </ul>
+          </div>
 
-            <div className="footer-links-group">
+          {/* Services & Contact Combined */}
+          <div>
+            <div className="footer-links-group" style={{ marginBottom: '1.5rem' }}>
               <h4 className="footer-links-title">Services</h4>
               <ul className="footer-links-list">
                 <li><span className="footer-link">Website Development</span></li>
                 <li><span className="footer-link">E-commerce Solutions</span></li>
                 <li><span className="footer-link">Full-Stack Development</span></li>
-                <li><span className="footer-link">UI/UX Design</span></li>
               </ul>
             </div>
 
@@ -181,111 +297,7 @@ const Footer = () => {
                     {agencyInfo.phone}
                   </a>
                 </li>
-                <li><span className="footer-link">{agencyInfo.location}</span></li>
               </ul>
-            </div>
-
-            <div className="footer-links-group newsletter-highlight">
-              <h4 className="footer-links-title" style={{ 
-                fontSize: '20px', 
-                fontWeight: '700',
-                background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                marginBottom: '12px',
-                letterSpacing: '0.5px'
-              }}>
-                📧 Stay Updated!
-              </h4>
-              <p className="text-sm text-gray-400 mb-4" style={{ 
-                fontWeight: '500',
-                lineHeight: '1.6',
-                color: '#9CA3AF'
-              }}>
-                Subscribe to get exclusive updates, latest news, and special offers directly to your inbox.
-              </p>
-              <form onSubmit={handleNewsletterSubmit} className="newsletter-form">
-                <div className="newsletter-input-wrapper" style={{
-                  position: 'relative',
-                  border: '2px solid rgba(139, 92, 246, 0.4)',
-                  borderRadius: '12px',
-                  background: 'rgba(139, 92, 246, 0.08)',
-                  padding: '2px',
-                  boxShadow: '0 0 20px rgba(139, 92, 246, 0.15)'
-                }}>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="newsletter-input"
-                    disabled={loading}
-                    style={{ 
-                      background: 'rgba(15, 22, 41, 0.9)',
-                      border: 'none',
-                      paddingRight: '50px',
-                      fontSize: '14px'
-                    }}
-                  />
-                  <button 
-                    type="submit" 
-                    className="newsletter-button"
-                    disabled={loading}
-                    aria-label="Subscribe to newsletter"
-                    style={{
-                      background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
-                      border: 'none',
-                      boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'scale(1.05)';
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.5)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.boxShadow = '0 4px 14px rgba(139, 92, 246, 0.4)';
-                    }}
-                  >
-                    {loading ? (
-                      <span className="newsletter-loading">...</span>
-                    ) : (
-                      <Send className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                
-                {/* Privacy Statement */}
-                <p className="text-xs text-gray-500 mt-3" style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontSize: '12px',
-                  color: '#9CA3AF',
-                  fontWeight: '400'
-                }}>
-                  <Shield className="h-3 w-3" style={{ color: '#8B5CF6' }} />
-                  Your privacy is protected. Unsubscribe anytime.
-                </p>
-
-                {message.text && (
-                  <p className={`newsletter-message newsletter-message-${message.type}`} style={{
-                    padding: '10px 14px',
-                    borderRadius: '8px',
-                    fontSize: '13px',
-                    marginTop: '12px',
-                    fontWeight: '500',
-                    background: message.type === 'success' 
-                      ? 'rgba(16, 185, 129, 0.15)' 
-                      : 'rgba(239, 68, 68, 0.15)',
-                    border: `1px solid ${message.type === 'success' ? '#10B981' : '#EF4444'}`,
-                    color: message.type === 'success' ? '#10B981' : '#EF4444'
-                  }}>
-                    {message.text}
-                  </p>
-                )}
-              </form>
             </div>
           </div>
         </div>
