@@ -110,9 +110,10 @@ const BlogList = () => {
       {/* Category Filter */}
       {categories.length > 1 && (
         <section style={{ 
-          background: '#0F1629',
+          background: 'rgba(255, 255, 255, 0.9)',
           padding: '24px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          borderBottom: '1px solid rgba(102, 126, 234, 0.2)',
+          backdropFilter: 'blur(10px)'
         }}>
           <div style={{ 
             maxWidth: '1200px', 
@@ -128,9 +129,9 @@ const BlogList = () => {
                 onClick={() => setSelectedCategory(category)}
                 style={{
                   padding: '8px 20px',
-                  background: selectedCategory === category ? '#8B5CF6' : 'rgba(255, 255, 255, 0.05)',
-                  color: selectedCategory === category ? '#fff' : 'rgba(255, 255, 255, 0.7)',
-                  border: selectedCategory === category ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: selectedCategory === category ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(102, 126, 234, 0.1)',
+                  color: selectedCategory === category ? '#fff' : '#667eea',
+                  border: selectedCategory === category ? 'none' : '1px solid rgba(102, 126, 234, 0.3)',
                   borderRadius: '20px',
                   fontSize: '14px',
                   fontWeight: '500',
