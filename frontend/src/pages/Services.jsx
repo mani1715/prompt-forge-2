@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, Code, ShoppingCart, Layers, Palette, Sparkles,
+  ArrowRight, Code, ShoppingCart, Layers, Palette,
   CheckCircle, Zap, Award, Smartphone, Code2, Search, Shield,
   FileSearch, CheckCircle2, Rocket, HeartHandshake
 } from 'lucide-react';
