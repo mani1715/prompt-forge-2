@@ -45,7 +45,7 @@ const BlogList = () => {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', paddingTop: '80px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
           <div style={{ color: '#fff', fontSize: '18px' }}>Loading blogs...</div>
         </div>
@@ -55,15 +55,15 @@ const BlogList = () => {
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', paddingTop: '80px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
-          <div style={{ color: '#EF4444', fontSize: '18px', marginBottom: '16px' }}>{error}</div>
+          <div style={{ color: '#FFF', fontSize: '18px', marginBottom: '16px' }}>{error}</div>
           <button 
             onClick={fetchBlogs}
             style={{
               padding: '12px 32px',
-              background: '#8B5CF6',
-              color: '#fff',
+              background: '#fff',
+              color: '#667eea',
               border: 'none',
               borderRadius: '8px',
               fontSize: '16px',
@@ -79,7 +79,7 @@ const BlogList = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
+    <div style={{ minHeight: '100vh', background: '#F8F9FA', paddingTop: '80px' }}>
       {/* Hero Section */}
       <section style={{ 
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
