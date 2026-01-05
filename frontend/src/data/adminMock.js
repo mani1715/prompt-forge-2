@@ -106,7 +106,7 @@ export const adminData = {
       },
       info: {
         visible: true,
-        email: 'contact@mspndev.com',
+        email: 'contact@promptforgedev.com',
         phone: '+1 (555) 123-4567',
         address: 'San Francisco, CA'
       }
@@ -250,18 +250,18 @@ export const adminData = {
     agency: {
       name: 'Prompt Forge',
       owner: 'Maneesh',
-      email: 'contact@mspndev.com',
+      email: 'contact@promptforgedev.com',
       phone: '+1 (555) 123-4567',
       address: 'San Francisco, CA',
       description: 'Premium Web Development Agency',
       tagline: 'Transforming Ideas into Digital Reality'
     },
     social: {
-      facebook: 'https://facebook.com/mspndev',
-      twitter: 'https://twitter.com/mspndev',
-      linkedin: 'https://linkedin.com/company/mspndev',
-      instagram: 'https://instagram.com/mspndev',
-      github: 'https://github.com/mspndev'
+      facebook: 'https://facebook.com/promptforgedev',
+      twitter: 'https://twitter.com/promptforgedev',
+      linkedin: 'https://linkedin.com/company/promptforgedev',
+      instagram: 'https://instagram.com/promptforgedev',
+      github: 'https://github.com/promptforgedev'
     },
     theme: {
       primaryColor: '#7C5CFF',

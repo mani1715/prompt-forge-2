@@ -20,7 +20,7 @@ const HeroWithLogo = ({ children, showLogo = true, logoOpacity = 0.04 }) => {
           zIndex: 0
         }}>
           <img 
-            src="/mspn-logo-transparent.png" 
+            src="/promptforge-logo-transparent.png" 
             alt="" 
             style={{
               width: '100%',

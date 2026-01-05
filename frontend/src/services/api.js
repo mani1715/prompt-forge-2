@@ -11,7 +11,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
   ? (process.env.REACT_APP_BACKEND_URL.endsWith('/api') 
       ? process.env.REACT_APP_BACKEND_URL 
       : `${process.env.REACT_APP_BACKEND_URL}/api`)
-  : 'https://mspn-dev.onrender.com/api';
+  : 'https://promptforge-dev.onrender.com/api';
 
 if (!BACKEND_URL) {
   console.error('❌ Backend URL not defined');

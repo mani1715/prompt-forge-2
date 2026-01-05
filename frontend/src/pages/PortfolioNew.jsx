@@ -160,7 +160,7 @@ const Portfolio = () => {
     "provider": {
       "@type": "Organization",
       "name": "Prompt Forge",
-      "url": "https://mspndev.com"
+      "url": "https://promptforgedev.com"
     },
     "hasPart": portfolioProjects.map(project => ({
       "@type": "CreativeWork",
@@ -190,7 +190,7 @@ const Portfolio = () => {
         <title>Portfolio - Prompt Forge | Web Development Projects</title>
         <meta name="description" content="Explore Prompt Forge's portfolio of web development projects including e-commerce platforms, web applications, dashboards, and UI/UX design work. View live demos and case studies." />
         <meta name="keywords" content="web development portfolio, react projects, e-commerce websites, web applications, Prompt Forge projects" />
-        <link rel="canonical" href="https://mspndev.com/portfolio" />
+        <link rel="canonical" href="https://promptforgedev.com/portfolio" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

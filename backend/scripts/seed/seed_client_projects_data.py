@@ -13,7 +13,7 @@ import os
 load_dotenv()
 
 MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017')
-DB_NAME = os.getenv('DB_NAME', 'mspn_dev_db')
+DB_NAME = os.getenv('DB_NAME', 'promptforge_dev_db')
 
 async def seed_client_projects():
     """Create sample client projects with complete features"""

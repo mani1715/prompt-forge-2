@@ -22,12 +22,12 @@ class Settings(BaseModel):
             "example": {
                 "agency_name": "Prompt Forge",
                 "owner_name": "Maneesh",
-                "email": "info@mspndev.com",
+                "email": "info@promptforgedev.com",
                 "phone": "+1234567890",
                 "address": "123 Main St, City, Country",
                 "social_links": {
-                    "facebook": "https://facebook.com/mspndev",
-                    "twitter": "https://twitter.com/mspndev"
+                    "facebook": "https://facebook.com/promptforgedev",
+                    "twitter": "https://twitter.com/promptforgedev"
                 }
             }
         }

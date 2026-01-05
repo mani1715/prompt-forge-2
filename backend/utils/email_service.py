@@ -4,8 +4,8 @@ from typing import Optional
 
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
 BREVO_API_URL = "https://api.brevo.com/v3/smtp/email"
-ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@mspndev.com')
-BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', 'noreply@mspndev.com')
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@promptforgedev.com')
+BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', 'noreply@promptforgedev.com')
 BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Prompt Forge')
 
 def send_contact_email(name: str, email: str, message: str, phone: Optional[str] = None) -> bool:

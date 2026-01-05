@@ -19,7 +19,7 @@ load_dotenv(ROOT_DIR / '.env')
 async def create_super_admin():
     # Get MongoDB URI from environment
     mongodb_uri = os.environ.get('MONGODB_URI')
-    db_name = os.environ.get('DB_NAME', 'mspn_dev_db')
+    db_name = os.environ.get('DB_NAME', 'promptforge_dev_db')
     
     if not mongodb_uri:
         print("❌ Error: MONGODB_URI environment variable is not set!")

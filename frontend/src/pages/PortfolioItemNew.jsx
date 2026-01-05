@@ -66,7 +66,7 @@ const PortfolioItem = () => {
         <title>{project.seo?.title || `${project.title} - Prompt Forge Portfolio`}</title>
         <meta name="description" content={project.seo?.description || project.description} />
         <meta name="keywords" content={project.technologies.join(', ')} />
-        <link rel="canonical" href={`https://mspndev.com/portfolio/${project.slug || project.id}`} />
+        <link rel="canonical" href={`https://promptforgedev.com/portfolio/${project.slug || project.id}`} />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

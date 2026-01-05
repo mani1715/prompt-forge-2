@@ -31,7 +31,7 @@ async def create_demo_data():
             "name": "Maneesh Kumar",
             "email": "maneesh@example.com",
             "password_hash": hash_password("demo123"),  # Password: demo123
-            "company": "mspn",
+            "company": "promptforge",
             "phone": "+1-234-567-8900",
             "created_at": datetime.utcnow().isoformat(),
             "created_by": "system"

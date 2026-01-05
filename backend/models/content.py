@@ -52,7 +52,7 @@ class WebsiteContent(BaseModel):
     # Contact Page
     contact_title: str = "Get In Touch"
     contact_description: str = "Have a project in mind? Let's discuss how we can help."
-    contact_email: str = "info@mspndev.com"
+    contact_email: str = "info@promptforgedev.com"
     contact_phone: str = "+1 234 567 890"
     contact_address: str = "123 Main Street, City, Country"
     

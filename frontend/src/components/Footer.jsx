@@ -79,7 +79,7 @@ const Footer = () => {
             {/* Transparent Logo Image */}
             <div style={{ marginBottom: '16px' }}>
               <img 
-                src="/mspn-logo-transparent.png" 
+                src="/promptforge-logo-transparent.png" 
                 alt="Prompt Forge Logo" 
                 style={{
                   height: '70px',

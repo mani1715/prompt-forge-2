@@ -16,7 +16,7 @@ async def get_settings():
         default_settings = Settings(
             agency_name="Prompt Forge",
             owner_name="Maneesh",
-            email="info@mspndev.com",
+            email="info@promptforgedev.com",
             phone="+1234567890",
             social_links={},
             theme={},
@@ -45,7 +45,7 @@ async def update_settings(settings_data: SettingsUpdate):
         settings = Settings(
             agency_name=settings_data.agency_name or "Prompt Forge",
             owner_name=settings_data.owner_name or "Admin",
-            email=settings_data.email or "info@mspndev.com",
+            email=settings_data.email or "info@promptforgedev.com",
             phone=settings_data.phone or "+1234567890",
             address=settings_data.address,
             description=settings_data.description,

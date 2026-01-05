@@ -157,8 +157,8 @@ const Contact = () => {
             "id": 1,
             "icon": "Mail",
             "label": "Email Address",
-            "value": "mspndev.in@gmail.com",
-            "href": "mailto:mspndev.in@gmail.com",
+            "value": "promptforgedev.in@gmail.com",
+            "href": "mailto:promptforgedev.in@gmail.com",
             "description": "Send us an email anytime"
           },
           {

@@ -15,7 +15,7 @@ load_dotenv(ROOT_DIR / ".env")
 
 # ---------------- ENV VARIABLES ----------------
 MONGODB_URI = os.getenv("MONGODB_URI")
-DB_NAME = os.getenv("DB_NAME", "mspn_dev_db")
+DB_NAME = os.getenv("DB_NAME", "promptforge_dev_db")
 
 if not MONGODB_URI:
     logger.error("❌ MONGODB_URI is missing!")

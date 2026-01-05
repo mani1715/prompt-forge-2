@@ -25,14 +25,14 @@ async def seed_admin_user():
     print("Seeding admin user...")
     
     # Check if admin already exists
-    existing = await users_collection.find_one({"email": "admin@mspndev.com"})
+    existing = await users_collection.find_one({"email": "admin@promptforgedev.com"})
     if existing:
         print("Admin user already exists, skipping...")
         return
     
     admin = User(
         name="Admin",
-        email="admin@mspndev.com",
+        email="admin@promptforgedev.com",
         password_hash=hash_password("admin123"),
         role="admin"
     )
@@ -185,17 +185,17 @@ async def seed_settings():
     settings = Settings(
         agency_name="Prompt Forge",
         owner_name="Maneesh",
-        email="info@mspndev.com",
+        email="info@promptforgedev.com",
         phone="+1234567890",
         address="123 Main Street, City, Country",
         description="Professional web development agency specializing in modern web applications",
         tagline="Building Digital Excellence",
         social_links={
-            "facebook": "https://facebook.com/mspndev",
-            "twitter": "https://twitter.com/mspndev",
-            "linkedin": "https://linkedin.com/company/mspndev",
-            "instagram": "https://instagram.com/mspndev",
-            "github": "https://github.com/mspndev"
+            "facebook": "https://facebook.com/promptforgedev",
+            "twitter": "https://twitter.com/promptforgedev",
+            "linkedin": "https://linkedin.com/company/promptforgedev",
+            "instagram": "https://instagram.com/promptforgedev",
+            "github": "https://github.com/promptforgedev"
         },
         theme={
             "primary": "#1C2A3A",
@@ -339,7 +339,7 @@ async def main():
         
         print("\n✅ Database seeding completed successfully!\n")
         print("Admin Login Credentials:")
-        print("  Email: admin@mspndev.com")
+        print("  Email: admin@promptforgedev.com")
         print("  Password: admin123\n")
         
     except Exception as e:

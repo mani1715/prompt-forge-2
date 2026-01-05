@@ -76,7 +76,7 @@ const Login = () => {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <img
-            src="/mspn-logo-transparent.png"
+            src="/promptforge-logo-transparent.png"
             alt="Prompt Forge Logo"
             style={{ height: '80px', marginBottom: '16px' }}
           />

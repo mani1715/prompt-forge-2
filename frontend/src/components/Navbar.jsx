@@ -31,7 +31,7 @@ const Navbar = () => {
           textDecoration: 'none'
         }}>
           <img 
-            src="/mspn-logo-transparent.png" 
+            src="/promptforge-logo-transparent.png" 
             alt="Prompt Forge Logo" 
             style={{
               height: '50px',

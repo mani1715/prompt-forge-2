@@ -19,7 +19,7 @@ load_dotenv(ROOT_DIR / '.env')
 async def create_admin_user():
     # Get MongoDB URI from environment
     mongodb_uri = os.environ.get('MONGODB_URI')
-    db_name = os.environ.get('DB_NAME', 'mspn_dev_db')
+    db_name = os.environ.get('DB_NAME', 'promptforge_dev_db')
     
     if not mongodb_uri:
         print("❌ Error: MONGODB_URI environment variable is not set!")
@@ -32,7 +32,7 @@ async def create_admin_user():
     users_collection = db['users']
     
     # Check if admin already exists
-    existing_admin = await users_collection.find_one({"email": "admin@mspn.com"})
+    existing_admin = await users_collection.find_one({"email": "admin@promptforge.com"})
     
     if existing_admin:
         print("Admin user already exists!")
@@ -44,7 +44,7 @@ async def create_admin_user():
     admin_user = {
         "id": str(uuid.uuid4()),
         "name": "Admin",
-        "email": "admin@mspn.com",
+        "email": "admin@promptforge.com",
         "password_hash": hash_password("admin123"),
         "role": "admin",
         "created_at": datetime.utcnow().isoformat()
@@ -52,7 +52,7 @@ async def create_admin_user():
     
     await users_collection.insert_one(admin_user)
     print("✅ Admin user created successfully!")
-    print(f"Email: admin@mspn.com")
+    print(f"Email: admin@promptforge.com")
     print(f"Password: admin123")
     print("\n⚠️  IMPORTANT: Change this password after first login!")
     

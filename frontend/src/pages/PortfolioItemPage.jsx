@@ -187,7 +187,7 @@ const PortfolioItemPage = () => {
         <meta property="og:title" content={project.title} />
         <meta property="og:description" content={project.description} />
         <meta property="og:image" content={project.image} />
-        <meta property="og:url" content={`https://mspndev.com/portfolio/${project.slug || project.id}`} />
+        <meta property="og:url" content={`https://promptforgedev.com/portfolio/${project.slug || project.id}`} />
         
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -195,7 +195,7 @@ const PortfolioItemPage = () => {
         <meta name="twitter:description" content={project.description} />
         <meta name="twitter:image" content={project.image} />
         
-        <link rel="canonical" href={`https://mspndev.com/portfolio/${project.slug || project.id}`} />
+        <link rel="canonical" href={`https://promptforgedev.com/portfolio/${project.slug || project.id}`} />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

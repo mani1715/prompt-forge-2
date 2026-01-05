@@ -5,15 +5,15 @@ export const agencyInfo = {
   tagline: 'Crafting Digital Excellence',
   description: 'Full-stack web development agency specializing in custom solutions',
   developer: 'Maneesh',
-  email: 'contact@mspndev.com',
+  email: 'contact@promptforgedev.com',
   phone: '+1 (555) 123-4567',
   location: 'Worldwide',
   whatsapp: '+918328284501',
   socialLinks: {
-    github: 'https://github.com/mspndev',
+    github: 'https://github.com/promptforgedev',
     linkedin: 'https://linkedin.com/in/maneesh',
-    twitter: 'https://twitter.com/mspndev',
-    instagram: 'https://instagram.com/mspndev',
+    twitter: 'https://twitter.com/promptforgedev',
+    instagram: 'https://instagram.com/promptforgedev',
     whatsapp: '+918328284501'
   }
 };
@@ -375,8 +375,8 @@ export const contactConfig = {
         id: 1,
         icon: 'Mail',
         label: 'Email Address',
-        value: 'mspndev.in@gmail.com',
-        href: 'mailto:mspndev.in@gmail.com',
+        value: 'promptforgedev.in@gmail.com',
+        href: 'mailto:promptforgedev.in@gmail.com',
         description: 'Send us an email anytime'
       },
       {
@@ -744,7 +744,7 @@ export const portfolioProjects = [
     technologies: ['React', 'Python', 'MongoDB', 'D3.js', 'Chart.js'],
     techStack: ['React', 'Python', 'Flask', 'MongoDB', 'D3.js', 'Chart.js', 'Redis', 'WebSockets'],
     featured: false,
-    githubLink: 'https://github.com/mspndev/analytics-dashboard',
+    githubLink: 'https://github.com/promptforgedev/analytics-dashboard',
     liveLink: null,
     date: '2024-09-10',
     clientName: 'DataMetrics SaaS',

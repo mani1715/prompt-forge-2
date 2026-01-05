@@ -468,7 +468,7 @@ const ContentEditor = () => {
                 type="email"
                 value={content.contact_email || ''}
                 onChange={(e) => handleChange('contact_email', e.target.value)}
-                placeholder="info@mspndev.com"
+                placeholder="info@promptforgedev.com"
               />
             </div>
             <div className="content-field">
