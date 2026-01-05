@@ -156,7 +156,7 @@ const BlogList = () => {
         {filteredBlogs.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 24px' }}>
             <p style={{ 
-              color: 'rgba(255, 255, 255, 0.6)',
+              color: '#64748B',
               fontSize: '18px'
             }}>
               No blog posts found in this category.
@@ -175,22 +175,23 @@ const BlogList = () => {
                 style={{ 
                   textDecoration: 'none',
                   display: 'block',
-                  background: '#0F1629',
-                  borderRadius: '12px',
+                  background: '#FFFFFF',
+                  borderRadius: '16px',
                   overflow: 'hidden',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(102, 126, 234, 0.15)',
                   transition: 'all 0.3s ease',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.borderColor = '#8B5CF6';
-                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(139, 92, 246, 0.2)';
+                  e.currentTarget.style.borderColor = '#667eea';
+                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(102, 126, 234, 0.25)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.15)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.05)';
                 }}
               >
                 {/* Cover Image */}
@@ -206,11 +207,12 @@ const BlogList = () => {
                       top: '16px',
                       left: '16px',
                       padding: '6px 12px',
-                      background: 'rgba(139, 92, 246, 0.9)',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                       color: '#fff',
-                      borderRadius: '6px',
+                      borderRadius: '8px',
                       fontSize: '12px',
-                      fontWeight: '600'
+                      fontWeight: '600',
+                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
                     }}>
                       {blog.category}
                     </div>
@@ -222,7 +224,7 @@ const BlogList = () => {
                   <h3 style={{ 
                     fontSize: '22px',
                     fontWeight: '600',
-                    color: '#fff',
+                    color: '#1E293B',
                     marginBottom: '12px',
                     lineHeight: '1.4'
                   }}>
@@ -230,7 +232,7 @@ const BlogList = () => {
                   </h3>
 
                   <p style={{ 
-                    color: 'rgba(255, 255, 255, 0.7)',
+                    color: '#64748B',
                     fontSize: '15px',
                     lineHeight: '1.6',
                     marginBottom: '16px'
@@ -244,7 +246,7 @@ const BlogList = () => {
                     flexWrap: 'wrap',
                     gap: '16px',
                     fontSize: '14px',
-                    color: 'rgba(255, 255, 255, 0.5)',
+                    color: '#94A3B8',
                     marginBottom: '16px'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -273,8 +275,8 @@ const BlogList = () => {
                             alignItems: 'center',
                             gap: '4px',
                             padding: '4px 10px',
-                            background: 'rgba(139, 92, 246, 0.1)',
-                            color: '#A78BFA',
+                            background: 'rgba(102, 126, 234, 0.1)',
+                            color: '#667eea',
                             borderRadius: '6px',
                             fontSize: '12px',
                             fontWeight: '500'
@@ -292,7 +294,7 @@ const BlogList = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#8B5CF6',
+                    color: '#667eea',
                     fontSize: '15px',
                     fontWeight: '500'
                   }}>
