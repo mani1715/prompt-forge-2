@@ -263,6 +263,45 @@ const ServicesManager = () => {
                 </div>
 
                 <div className="admin-form-group">
+                  <label className="admin-form-label">Service Image URL</label>
+                  <input
+                    type="url"
+                    className="admin-form-input"
+                    value={formData.image || ''}
+                    onChange={(e) => handleInputChange('image', e.target.value)}
+                    placeholder="https://example.com/service-image.jpg"
+                  />
+                  <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                    Enter a URL to an image that represents this service
+                  </small>
+                </div>
+
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Service Link URL</label>
+                  <input
+                    type="text"
+                    className="admin-form-input"
+                    value={formData.link || ''}
+                    onChange={(e) => handleInputChange('link', e.target.value)}
+                    placeholder="https://example.com/service or /services/web-development"
+                  />
+                  <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                    External link (https://...) or internal path (/page)
+                  </small>
+                </div>
+
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Link Button Text</label>
+                  <input
+                    type="text"
+                    className="admin-form-input"
+                    value={formData.link_text || 'Learn More'}
+                    onChange={(e) => handleInputChange('link_text', e.target.value)}
+                    placeholder="Learn More"
+                  />
+                </div>
+
+                <div className="admin-form-group">
                   <label className="admin-form-label">Features (comma-separated)</label>
                   <input
                     type="text"
