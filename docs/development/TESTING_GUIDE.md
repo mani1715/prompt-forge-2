@@ -2,10 +2,10 @@
 
 ## Access the Application
 
-**Preview URL**: https://prompt-craft-188.preview.emergentagent.com
+**Preview URL**: https://prompt-forge-116.preview.emergentagent.com
 
 ## Admin Login Credentials
-- **URL**: https://prompt-craft-188.preview.emergentagent.com/admin/login
+- **URL**: https://prompt-forge-116.preview.emergentagent.com/admin/login
 - **Username**: `admin`
 - **Password**: `admin123`
 - ⚠️ **Important**: Change this password after first login!
