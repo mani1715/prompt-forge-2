@@ -135,6 +135,7 @@ api_router.include_router(client_projects_router)
 
 api_router.include_router(bookings_router)
 api_router.include_router(booking_settings_router)
+api_router.include_router(feelings_services_router)
 
 app.include_router(api_router)
 
