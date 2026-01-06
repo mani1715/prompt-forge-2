@@ -32,13 +32,21 @@ const ServicesManager = () => {
   const handleOpenModal = (service = null) => {
     if (service) {
       setEditingService(service);
-      setFormData(service);
+      setFormData({
+        ...service,
+        image: service.image || '',
+        link: service.link || '',
+        link_text: service.link_text || 'Learn More'
+      });
     } else {
       setEditingService(null);
       setFormData({
         icon: 'Code',
         title: '',
         description: '',
+        image: '',
+        link: '',
+        link_text: 'Learn More',
         features: [],
         price: '',
         order: adminData.services.length + 1,
