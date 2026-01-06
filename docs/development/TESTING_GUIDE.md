@@ -2,10 +2,10 @@
 
 ## Access the Application
 
-**Preview URL**: https://codebase-builder-2.preview.emergentagent.com
+**Preview URL**: https://code-forge-43.preview.emergentagent.com
 
 ## Admin Login Credentials
-- **URL**: https://codebase-builder-2.preview.emergentagent.com/admin/login
+- **URL**: https://code-forge-43.preview.emergentagent.com/admin/login
 - **Username**: `admin`
 - **Password**: `admin123`
 - ⚠️ **Important**: Change this password after first login!

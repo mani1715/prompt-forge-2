@@ -2,10 +2,10 @@
 
 ## 🚀 Access Your Application
 
-**Live URL:** https://codebase-builder-2.preview.emergentagent.com
+**Live URL:** https://code-forge-43.preview.emergentagent.com
 
 ### Admin Panel Login
-**URL:** https://codebase-builder-2.preview.emergentagent.com/admin/login
+**URL:** https://code-forge-43.preview.emergentagent.com/admin/login
 
 ```
 Username: admin
@@ -315,9 +315,9 @@ Your portfolio management system is now fully operational with:
 ---
 
 **Quick Links:**
-- Admin Login: https://codebase-builder-2.preview.emergentagent.com/admin/login
-- Client Login: https://codebase-builder-2.preview.emergentagent.com/client/login
-- Main Site: https://codebase-builder-2.preview.emergentagent.com
+- Admin Login: https://code-forge-43.preview.emergentagent.com/admin/login
+- Client Login: https://code-forge-43.preview.emergentagent.com/client/login
+- Main Site: https://code-forge-43.preview.emergentagent.com
 
 **Documentation:**
 - Full fix details: `/app/MIXED_CONTENT_FIX_COMPLETE.md`

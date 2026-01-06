@@ -4,7 +4,7 @@
 
 **Issue**: Browser blocking HTTP requests from HTTPS page
 ```
-Mixed Content: The page at 'https://codebase-builder-2.preview.emergentagent.com/client/dashboard' 
+Mixed Content: The page at 'https://code-forge-43.preview.emergentagent.com/client/dashboard' 
 was loaded over HTTPS, but requested 'http://...api/client/projects/'. 
 This request has been blocked.
 ```
