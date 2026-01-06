@@ -211,7 +211,7 @@ async def seed_website_templates():
             print(f"✅ Added {len(result.inserted_ids)} website template services")
             
             for template in website_templates:
-                print(f"   - {template['title']} (${template['price']})")
+                print(f"   - {template['title']} ({template['price']})")
         
         print("\n🎉 Website templates seeded successfully!")
         
