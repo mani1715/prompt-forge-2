@@ -88,159 +88,146 @@ const Services = () => {
         </div>
       </section>
 
-      {/* DETAILED SERVICES GRID SECTION */}
-      <section className="detailed-services-section" data-admin-editable="detailed-services">
+      {/* WEBSITE TEMPLATES GRID SECTION - Similar to Portfolio */}
+      <section className="website-templates-section" data-admin-editable="website-templates">
         <div className="section-container-premium">
+          <div className="section-header-premium" style={{ marginBottom: '3rem' }}>
+            <div className="section-badge">
+              Ready-to-Launch Websites
+            </div>
+            <h2 className="section-title-premium">
+              Website Templates - 24 Hour Activation
+            </h2>
+            <p className="section-description-premium">
+              Choose from our pre-built website templates and get your site live in just 24 hours
+            </p>
+          </div>
+
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px' }}>
-              <p>Loading services...</p>
+              <p>Loading website templates...</p>
             </div>
           ) : (
-            <div className="detailed-services-grid">
+            <div className="services-grid-portfolio-style">
               {services.filter(service => service.active).map((service, index) => {
-                const IconComponent = serviceIconMap[service.icon] || Code;
                 const isExternalLink = service.link && service.link.startsWith('http');
                 
                 return (
                   <Card 
                     key={service.id} 
-                    className="detailed-service-card"
+                    className="service-card-portfolio-style"
                     data-admin-editable={`service-${service.id}`}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    {/* Service Image */}
-                    {service.image && (
-                      <div style={{ marginBottom: '20px', overflow: 'hidden', borderRadius: '12px' }}>
+                    {/* Website Preview Image */}
+                    <div className="service-image-wrapper">
+                      {service.image ? (
                         <img 
                           src={service.image} 
                           alt={service.title}
-                          style={{
-                            width: '100%',
-                            height: '200px',
-                            objectFit: 'cover',
-                            transition: 'transform 0.3s ease'
-                          }}
-                          onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
-                          onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                          className="service-image"
                         />
+                      ) : (
+                        <div className="service-image-placeholder">
+                          <Code className="placeholder-icon" />
+                        </div>
+                      )}
+                      
+                      {/* Hover Overlay with View Demo Button */}
+                      <div className="service-overlay">
+                        <div className="service-overlay-content">
+                          {service.link && (
+                            isExternalLink ? (
+                              <a 
+                                href={service.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="service-view-btn"
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                                <span>View Demo</span>
+                              </a>
+                            ) : (
+                              <Link 
+                                to={service.link}
+                                className="service-view-btn"
+                              >
+                                <span>View Details</span>
+                                <ArrowRight className="h-4 w-4" />
+                              </Link>
+                            )
+                          )}
+                        </div>
                       </div>
-                    )}
+
+                      {/* Price Badge */}
+                      {service.price && (
+                        <div className="service-price-badge">
+                          {service.price}
+                        </div>
+                      )}
+                    </div>
                     
-                    <div className="service-card-header-detailed">
-                      <div className="service-icon-detailed">
-                        <IconComponent className="h-10 w-10" />
+                    {/* Service Content */}
+                    <div className="service-card-content">
+                      <h3 className="service-card-title" data-admin-editable={`service-title-${service.id}`}>
+                        {service.title}
+                      </h3>
+                      
+                      <p className="service-card-description" data-admin-editable={`service-desc-${service.id}`}>
+                        {service.description}
+                      </p>
+                      
+                      {/* Features List */}
+                      {service.features && service.features.length > 0 && (
+                        <div className="service-features-compact">
+                          {service.features.slice(0, 3).map((feature, idx) => (
+                            <div 
+                              key={idx} 
+                              className="feature-item-compact"
+                              data-admin-editable={`service-feature-${service.id}-${idx}`}
+                            >
+                              <CheckCircle className="feature-icon" />
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                          {service.features.length > 3 && (
+                            <span className="more-features">
+                              +{service.features.length - 3} more features
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Action Footer */}
+                      <div className="service-card-footer">
+                        {service.link ? (
+                          isExternalLink ? (
+                            <a 
+                              href={service.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="service-action-link"
+                            >
+                              {service.link_text || 'View Demo'} →
+                            </a>
+                          ) : (
+                            <Link 
+                              to={service.link}
+                              className="service-action-link"
+                            >
+                              {service.link_text || 'Learn More'} →
+                            </Link>
+                          )
+                        ) : (
+                          <span className="service-action-link disabled">
+                            Coming Soon
+                          </span>
+                        )}
                       </div>
                     </div>
                     
-                    <h3 className="service-title-detailed" data-admin-editable={`service-title-${service.id}`}>
-                      {service.title}
-                    </h3>
-                    
-                    <p className="service-description-detailed" data-admin-editable={`service-desc-${service.id}`}>
-                      {service.description}
-                    </p>
-                    
-                    {/* Price Display */}
-                    {service.price && (
-                      <div style={{
-                        fontSize: '20px',
-                        fontWeight: '700',
-                        color: '#7C5CFF',
-                        margin: '16px 0',
-                        padding: '12px',
-                        background: 'linear-gradient(135deg, rgba(124, 92, 255, 0.1), rgba(124, 92, 255, 0.05))',
-                        borderRadius: '8px',
-                        textAlign: 'center'
-                      }}>
-                        {service.price}
-                      </div>
-                    )}
-                    
-                    {service.features && service.features.length > 0 && (
-                      <div className="service-features-detailed">
-                        <h4 className="features-heading">Key Features:</h4>
-                        <ul className="service-features-list-detailed">
-                          {service.features.map((feature, idx) => (
-                            <li 
-                              key={idx} 
-                              className="service-feature-item-detailed"
-                              data-admin-editable={`service-feature-${service.id}-${idx}`}
-                            >
-                              <CheckCircle className="feature-check-detailed" />
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {/* Service Link Button */}
-                    {service.link && (
-                      <div style={{ marginTop: '20px' }}>
-                        {isExternalLink ? (
-                          <a 
-                            href={service.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              padding: '12px 24px',
-                              background: 'linear-gradient(135deg, #7C5CFF, #9D7FFF)',
-                              color: 'white',
-                              borderRadius: '8px',
-                              textDecoration: 'none',
-                              fontWeight: '600',
-                              transition: 'all 0.3s ease',
-                              boxShadow: '0 4px 15px rgba(124, 92, 255, 0.3)'
-                            }}
-                            onMouseOver={(e) => {
-                              e.target.style.transform = 'translateY(-2px)';
-                              e.target.style.boxShadow = '0 6px 20px rgba(124, 92, 255, 0.4)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.target.style.transform = 'translateY(0)';
-                              e.target.style.boxShadow = '0 4px 15px rgba(124, 92, 255, 0.3)';
-                            }}
-                          >
-                            {service.link_text || 'Learn More'}
-                            <ExternalLink size={16} />
-                          </a>
-                        ) : (
-                          <Link 
-                            to={service.link}
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              padding: '12px 24px',
-                              background: 'linear-gradient(135deg, #7C5CFF, #9D7FFF)',
-                              color: 'white',
-                              borderRadius: '8px',
-                              textDecoration: 'none',
-                              fontWeight: '600',
-                              transition: 'all 0.3s ease',
-                              boxShadow: '0 4px 15px rgba(124, 92, 255, 0.3)'
-                            }}
-                            onMouseOver={(e) => {
-                              e.target.style.transform = 'translateY(-2px)';
-                              e.target.style.boxShadow = '0 6px 20px rgba(124, 92, 255, 0.4)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.target.style.transform = 'translateY(0)';
-                              e.target.style.boxShadow = '0 4px 15px rgba(124, 92, 255, 0.3)';
-                            }}
-                          >
-                            {service.link_text || 'Learn More'}
-                            <ArrowRight size={16} />
-                          </Link>
-                        )}
-                      </div>
-                    )}
-                    
-                    <div className="service-card-gradient-detailed"></div>
-                    <div className="service-card-glow"></div>
+                    <div className="service-card-gradient"></div>
                   </Card>
                 );
               })}
