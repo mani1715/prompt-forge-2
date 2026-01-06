@@ -78,13 +78,13 @@ const Services = () => {
         </div>
         <div className="services-hero-container">
           <div className="services-hero-badge" data-admin-editable="services-badge">
-            <span>What We Offer</span>
+            <span>Get Your Website in 24 Hours</span>
           </div>
           <h1 className="services-hero-title" data-admin-editable="services-title">
-            Our Services
+            Ready-to-Launch Website Templates
           </h1>
           <p className="services-hero-description" data-admin-editable="services-description">
-            What Prompt Forge delivers with quality and innovation. Comprehensive web solutions tailored to elevate your digital presence.
+            Choose from our collection of professionally designed websites. We provide ready-to-launch website templates for proposals, engagement invitations, and business sites - all activated within 24 hours.
           </p>
         </div>
       </section>
