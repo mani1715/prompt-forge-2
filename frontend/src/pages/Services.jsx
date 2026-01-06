@@ -91,52 +91,161 @@ const Services = () => {
       {/* DETAILED SERVICES GRID SECTION */}
       <section className="detailed-services-section" data-admin-editable="detailed-services">
         <div className="section-container-premium">
-          <div className="detailed-services-grid">
-            {detailedServices.map((service, index) => {
-              const IconComponent = serviceIconMap[service.icon] || Code;
-              return (
-                <Card 
-                  key={service.id} 
-                  className="detailed-service-card"
-                  data-admin-editable={`service-${service.id}`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="service-card-header-detailed">
-                    <div className="service-icon-detailed">
-                      <IconComponent className="h-10 w-10" />
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '40px' }}>
+              <p>Loading services...</p>
+            </div>
+          ) : (
+            <div className="detailed-services-grid">
+              {services.filter(service => service.active).map((service, index) => {
+                const IconComponent = serviceIconMap[service.icon] || Code;
+                const isExternalLink = service.link && service.link.startsWith('http');
+                
+                return (
+                  <Card 
+                    key={service.id} 
+                    className="detailed-service-card"
+                    data-admin-editable={`service-${service.id}`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    {/* Service Image */}
+                    {service.image && (
+                      <div style={{ marginBottom: '20px', overflow: 'hidden', borderRadius: '12px' }}>
+                        <img 
+                          src={service.image} 
+                          alt={service.title}
+                          style={{
+                            width: '100%',
+                            height: '200px',
+                            objectFit: 'cover',
+                            transition: 'transform 0.3s ease'
+                          }}
+                          onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+                          onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="service-card-header-detailed">
+                      <div className="service-icon-detailed">
+                        <IconComponent className="h-10 w-10" />
+                      </div>
                     </div>
-                  </div>
-                  
-                  <h3 className="service-title-detailed" data-admin-editable={`service-title-${service.id}`}>
-                    {service.title}
-                  </h3>
-                  
-                  <p className="service-description-detailed" data-admin-editable={`service-desc-${service.id}`}>
-                    {service.description}
-                  </p>
-                  
-                  <div className="service-features-detailed">
-                    <h4 className="features-heading">Key Features:</h4>
-                    <ul className="service-features-list-detailed">
-                      {service.features.map((feature, idx) => (
-                        <li 
-                          key={idx} 
-                          className="service-feature-item-detailed"
-                          data-admin-editable={`service-feature-${service.id}-${idx}`}
-                        >
-                          <CheckCircle className="feature-check-detailed" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="service-card-gradient-detailed"></div>
-                  <div className="service-card-glow"></div>
-                </Card>
-              );
-            })}
-          </div>
+                    
+                    <h3 className="service-title-detailed" data-admin-editable={`service-title-${service.id}`}>
+                      {service.title}
+                    </h3>
+                    
+                    <p className="service-description-detailed" data-admin-editable={`service-desc-${service.id}`}>
+                      {service.description}
+                    </p>
+                    
+                    {/* Price Display */}
+                    {service.price && (
+                      <div style={{
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        color: '#7C5CFF',
+                        margin: '16px 0',
+                        padding: '12px',
+                        background: 'linear-gradient(135deg, rgba(124, 92, 255, 0.1), rgba(124, 92, 255, 0.05))',
+                        borderRadius: '8px',
+                        textAlign: 'center'
+                      }}>
+                        {service.price}
+                      </div>
+                    )}
+                    
+                    {service.features && service.features.length > 0 && (
+                      <div className="service-features-detailed">
+                        <h4 className="features-heading">Key Features:</h4>
+                        <ul className="service-features-list-detailed">
+                          {service.features.map((feature, idx) => (
+                            <li 
+                              key={idx} 
+                              className="service-feature-item-detailed"
+                              data-admin-editable={`service-feature-${service.id}-${idx}`}
+                            >
+                              <CheckCircle className="feature-check-detailed" />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {/* Service Link Button */}
+                    {service.link && (
+                      <div style={{ marginTop: '20px' }}>
+                        {isExternalLink ? (
+                          <a 
+                            href={service.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              padding: '12px 24px',
+                              background: 'linear-gradient(135deg, #7C5CFF, #9D7FFF)',
+                              color: 'white',
+                              borderRadius: '8px',
+                              textDecoration: 'none',
+                              fontWeight: '600',
+                              transition: 'all 0.3s ease',
+                              boxShadow: '0 4px 15px rgba(124, 92, 255, 0.3)'
+                            }}
+                            onMouseOver={(e) => {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 6px 20px rgba(124, 92, 255, 0.4)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.target.style.transform = 'translateY(0)';
+                              e.target.style.boxShadow = '0 4px 15px rgba(124, 92, 255, 0.3)';
+                            }}
+                          >
+                            {service.link_text || 'Learn More'}
+                            <ExternalLink size={16} />
+                          </a>
+                        ) : (
+                          <Link 
+                            to={service.link}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              padding: '12px 24px',
+                              background: 'linear-gradient(135deg, #7C5CFF, #9D7FFF)',
+                              color: 'white',
+                              borderRadius: '8px',
+                              textDecoration: 'none',
+                              fontWeight: '600',
+                              transition: 'all 0.3s ease',
+                              boxShadow: '0 4px 15px rgba(124, 92, 255, 0.3)'
+                            }}
+                            onMouseOver={(e) => {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 6px 20px rgba(124, 92, 255, 0.4)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.target.style.transform = 'translateY(0)';
+                              e.target.style.boxShadow = '0 4px 15px rgba(124, 92, 255, 0.3)';
+                            }}
+                          >
+                            {service.link_text || 'Learn More'}
+                            <ArrowRight size={16} />
+                          </Link>
+                        )}
+                      </div>
+                    )}
+                    
+                    <div className="service-card-gradient-detailed"></div>
+                    <div className="service-card-glow"></div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
