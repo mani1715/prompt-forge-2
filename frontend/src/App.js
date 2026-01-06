@@ -179,6 +179,9 @@ function AppContent() {
             <Route path="client-projects" element={<ClientProjectsManager />} />
             <Route path="bookings" element={<BookingsManager />} />
             <Route path="booking-settings" element={<BookingSettings />} />
+            <Route path="feelings-services" element={<FeelingsServicesManager />} />
+            <Route path="service-requests" element={<ServiceRequestsManager />} />
+            <Route path="generated-links" element={<GeneratedLinksManager />} />
             <Route path="settings" element={<Settings />} />
           </Route>
         </Routes>
