@@ -14,6 +14,7 @@ from .chat import router as chat_router
 from .blogs import router as blogs_router
 from .newsletter import router as newsletter_router
 from .analytics import router as analytics_router
+from .feelings_services import router as feelings_services_router
 
 __all__ = [
     'auth_router',
@@ -31,5 +32,6 @@ __all__ = [
     'chat_router',
     'blogs_router',
     'newsletter_router',
-    'analytics_router'
+    'analytics_router',
+    'feelings_services_router'
 ]
