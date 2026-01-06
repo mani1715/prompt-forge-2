@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, X, GripVertical } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 const ServicesManager = () => {
-  const { adminData, addService, updateService, deleteService } = useAdmin();
+  const { adminData, addService, updateService, deleteService, fetchServices } = useAdmin();
   const [showModal, setShowModal] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState({
