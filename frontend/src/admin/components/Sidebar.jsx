@@ -21,7 +21,9 @@ import {
   UserCog,
   FolderKanban,
   Calendar,
-  Clock
+  Clock,
+  Heart,
+  Link2
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
