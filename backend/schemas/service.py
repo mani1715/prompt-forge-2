@@ -5,6 +5,9 @@ class ServiceCreate(BaseModel):
     title: str
     description: str
     icon: str
+    image: Optional[str] = None  # Service image/photo URL
+    link: Optional[str] = None  # External or internal link
+    link_text: Optional[str] = "Learn More"  # Link button text
     features: List[str] = []
     price: Optional[str] = None
     active: bool = True
@@ -14,6 +17,9 @@ class ServiceUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     icon: Optional[str] = None
+    image: Optional[str] = None  # Service image/photo URL
+    link: Optional[str] = None  # External or internal link
+    link_text: Optional[str] = None  # Link button text
     features: Optional[List[str]] = None
     price: Optional[str] = None
     active: Optional[bool] = None
@@ -24,6 +30,9 @@ class ServiceResponse(BaseModel):
     title: str
     description: str
     icon: str
+    image: Optional[str] = None  # Service image/photo URL
+    link: Optional[str] = None  # External or internal link
+    link_text: Optional[str] = "Learn More"  # Link button text
     features: List[str]
     price: Optional[str] = None
     price_range: Optional[str] = None  # Support legacy field
