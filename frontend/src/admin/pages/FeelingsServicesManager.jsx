@@ -57,6 +57,7 @@ const FeelingsServicesManager = () => {
         offer_price: service.offer_price,
         currency: service.currency,
         images: service.images || [],
+        demo_url: service.demo_url || '',
         is_active: service.is_active,
         display_order: service.display_order
       });
@@ -71,6 +72,7 @@ const FeelingsServicesManager = () => {
         offer_price: 299,
         currency: '₹',
         images: [],
+        demo_url: '',
         is_active: true,
         display_order: services.length
       });
