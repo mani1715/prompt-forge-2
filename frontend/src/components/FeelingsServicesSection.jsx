@@ -182,6 +182,31 @@ const FeelingsServicesSection = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                   data-testid={`service-card-${service.event_type.toLowerCase()}`}
                 >
+                  {/* Service Image */}
+                  {service.images && service.images.length > 0 && (
+                    <div className="service-image-container">
+                      <img 
+                        src={service.images[0]} 
+                        alt={service.name}
+                        className="service-image-feelings"
+                      />
+                      <div className="service-image-overlay">
+                        {service.demo_url && (
+                          <a
+                            href={service.demo_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="demo-link-overlay"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            <span>View Demo</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="service-card-header">
                     <div className="service-icon-feelings">
                       <EventIcon className="w-8 h-8" />
@@ -213,14 +238,27 @@ const FeelingsServicesSection = () => {
                     </div>
                   </div>
 
-                  <Button 
-                    className="service-cta-button"
-                    onClick={() => handleServiceClick(service)}
-                    data-testid={`request-button-${service.event_type.toLowerCase()}`}
-                  >
-                    Get Started
-                    <Heart className="w-4 h-4 ml-2" />
-                  </Button>
+                  <div className="service-card-actions">
+                    {service.demo_url && (
+                      <Button 
+                        variant="outline"
+                        className="demo-button"
+                        onClick={() => window.open(service.demo_url, '_blank')}
+                        data-testid={`demo-button-${service.event_type.toLowerCase()}`}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Live Demo
+                      </Button>
+                    )}
+                    <Button 
+                      className="service-cta-button"
+                      onClick={() => handleServiceClick(service)}
+                      data-testid={`request-button-${service.event_type.toLowerCase()}`}
+                    >
+                      Get This Website
+                      <Heart className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
                 </Card>
               );
             })}
