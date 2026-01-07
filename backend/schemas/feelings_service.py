@@ -10,6 +10,7 @@ class FeelingsServiceCreate(BaseModel):
     offer_price: float = Field(..., gt=0)
     currency: str = "₹"
     images: List[str] = []
+    demo_url: Optional[str] = None
     is_active: bool = True
     display_order: int = 0
 
